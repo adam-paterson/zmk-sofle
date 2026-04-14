@@ -675,8 +675,9 @@ rect.combo {
 <g transform="translate(292, 263) rotate(30.0)" class="key keypos-56">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:mouse-left-click-outline"/>
-</g>
+<a href="#LOWER">
+<text x="0" y="-4" class="key tap layer-activator">LOWER</text>
+</a></g>
 <g transform="translate(361, 273) rotate(30.0)" class="key keypos-57">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
@@ -1040,10 +1041,10 @@ rect.combo {
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
 </g>
-<g transform="translate(292, 263) rotate(30.0)" class="key keypos-56">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:mouse-left-click-outline"/>
+<g transform="translate(292, 263) rotate(30.0)" class="key held alternate keypos-56">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held alternate side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held alternate"/>
+<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:mouse-left-click-outline"/>
 </g>
 <g transform="translate(361, 273) rotate(30.0)" class="key trans keypos-57">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
