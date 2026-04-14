@@ -124,7 +124,7 @@
 &trans          &bt BT_CLR     &trans        &trans        &trans        &trans          &mmv MOVE_DOWN   &rgb_ug RGB_BRI  &rgb_ug RGB_BRD  &trans           &trans           &trans
 &trans          &out OUT_USB   &out OUT_BLE  &trans        &trans        &trans          &mmv MOVE_LEFT   &rgb_ug RGB_SPI  &rgb_ug RGB_SPD  &trans           &trans           &trans
 &trans          &sys_reset     &soft_off     &bootloader   &trans        &trans          &mmv MOVE_RIGHT  &trans           &trans           &trans           &trans           &trans
-&trans          &trans         &trans        &trans        &mkp LCLK       &trans          &mkp LCLK        &trans           &trans           &trans           &trans
+&trans          &trans         &trans        &trans        &mkp LCLK       &trans          &mkp LCLK        &trans           &trans           &trans           &trans           &trans
             >;
 
             display-name = "UTIL";
@@ -137,7 +137,7 @@
 &trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_DOWN   &kp LG(LEFT)  &kp LG(RIGHT)  &trans  &trans  &trans  &trans
 &trans  &kp LA(LEFT)  &kp LA(RIGHT)  &kp LC(LEFT)  &kp LC(RIGHT)  &trans    &mmv MOVE_LEFT   &trans  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_RIGHT  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &mkp LCLK  &trans    &mkp LCLK        &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &mkp LCLK  &trans    &mkp LCLK        &trans  &trans  &trans  &trans  &trans
             >;
 
             display-name = "CODE";
