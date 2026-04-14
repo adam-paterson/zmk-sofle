@@ -110,7 +110,7 @@
 &trans      &trans     &trans        &trans        &trans  &trans       &mmv MOVE_UP     &trans     &trans     &trans     &trans           &trans      &trans
 &kp INS     &kp PSCRN  &kp K_CMENU   &trans        &trans  &trans       &mmv MOVE_DOWN   &trans     &trans     &kp UP     &trans           &kp N0      &trans
 &kp LALT    &kp LCTRL  &kp LSHFT     &trans        &trans  &trans       &mmv MOVE_LEFT   &kp PG_UP  &kp LEFT   &kp DOWN   &kp RIGHT        &kp DEL     &kp BSPC
-&kp UNDO    &kp CUT    &kp COPY      &kp PASTE     &trans  &trans       &mmv MOVE_RIGHT  &kp PG_DN  &trans     &trans     &trans           &trans      &trans
+&kp LC(Z)   &kp LC(X)  &kp LC(C)     &kp LC(V)     &trans  &trans       &mmv MOVE_RIGHT  &kp PG_DN  &trans     &trans     &trans           &trans      &trans
 &trans      &trans     &trans        &trans        &mkp LCLK  &trans       &mkp LCLK        &trans     &trans     &trans     &trans           &trans
             >;
 
