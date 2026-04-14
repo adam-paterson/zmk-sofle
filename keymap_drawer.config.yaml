@@ -1,34 +1,98 @@
 draw_config:
   n_columns: 1
   draw_key_sides: true
-  key_w: 60.0
-  key_h: 56.0
-  split_gap: 30.0
-  combo_w: 28.0
-  combo_h: 26.0
-  key_rx: 6.0
-  key_ry: 6.0
+  key_w: 56.0
+  key_h: 52.0
+  split_gap: 25.0
+  combo_w: 26.0
+  combo_h: 24.0
+  key_rx: 8.0
+  key_ry: 8.0
   inner_pad_w: 2.0
   inner_pad_h: 2.0
-  outer_pad_w: 40.0
-  outer_pad_h: 56.0
+  outer_pad_w: 35.0
+  outer_pad_h: 50.0
   line_spacing: 1.2
-  arc_radius: 6.0
+  arc_radius: 8.0
   append_colon_to_layer_header: true
   small_pad: 2.0
   svg_extra_style: |
-    /* For default sytles, see https://github.com/caksoylar/keymap-drawer/blob/main/keymap_drawer/config.py#L85 */
+    /* Modern, clean styling with accent colors */
 
     svg.keymap {
-      font-family: Ubuntu Mono, Inconsolata, Consolas, Liberation Mono, Menlo, monospace;
-      font-size: 12px;
-      font-weight: bold;
+      font-family: 'SF Mono', 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
       text-rendering: optimizeLegibility;
     }
 
-    /* Color accent for held keys */
+    /* Layer headers - distinct colors */
+    text.layer-name {
+      font-size: 16px;
+      font-weight: 700;
+      fill: #2563eb;
+    }
+
+    /* Base layer - neutral */
+    g.layer-BASE rect.key {
+      fill: #f8fafc;
+      stroke: #94a3b8;
+      stroke-width: 1.5;
+    }
+
+    /* Lower layer - blue accent */
+    g.layer-LOWER rect.key {
+      fill: #eff6ff;
+      stroke: #3b82f6;
+      stroke-width: 1.5;
+    }
+
+    /* Raise layer - green accent */
+    g.layer-RAISE rect.key {
+      fill: #f0fdf4;
+      stroke: #22c55e;
+      stroke-width: 1.5;
+    }
+
+    /* Util layer - purple accent */
+    g.layer-UTIL rect.key {
+      fill: #faf5ff;
+      stroke: #a855f7;
+      stroke-width: 1.5;
+    }
+
+    /* Code layer - amber accent */
+    g.layer-CODE rect.key {
+      fill: #fffbeb;
+      stroke: #f59e0b;
+      stroke-width: 1.5;
+    }
+
+    /* Held keys - warm yellow */
     rect.held, rect.combo.held {
-        fill: #ffc;
+      fill: #fef3c7 !important;
+      stroke: #f59e0b !important;
+      stroke-width: 2.5;
+    }
+
+    /* Transparent keys - subtle */
+    g.trans rect.key {
+      fill: #f1f5f9;
+      stroke: #cbd5e1;
+      stroke-dasharray: 3,2;
+    }
+
+    /* Mod-tap keys - distinct styling */
+    rect.mod-tap {
+      fill: #e0e7ff;
+      stroke: #6366f1;
+    }
+
+    /* Combos - highlight */
+    rect.combo {
+      fill: #fee2e2;
+      stroke: #ef4444;
+      stroke-width: 2;
     }
 
     /* Technique borrowed and extended from https://github.com/englmaxi/zmk-config/blob/master/keymap-drawer/config.yaml */
@@ -264,6 +328,15 @@ parse_config:
       tap: $$mdi:bluetooth-off$$
     "&bt BT_CLR_ALL":
       tap: $$mdi:close-circle$$
+    # Editor shortcuts
+    "&kp LC(Z)":
+      tap: $$mdi:undo-variant$$
+    "&kp LC(X)":
+      tap: $$mdi:content-cut$$
+    "&kp LC(C)":
+      tap: $$mdi:content-copy$$
+    "&kp LC(V)":
+      tap: $$mdi:content-paste$$
 
   # ZMK
   zmk_keycode_map:
