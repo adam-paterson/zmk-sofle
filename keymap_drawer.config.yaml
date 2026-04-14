@@ -254,6 +254,16 @@ parse_config:
       tap: $$mdi:backup-restore$$
     "&bootloader":
       tap: $$mdi:progress-download$$
+    "&soft_off":
+      tap: $$mdi:power-standby$$
+    "&out OUT_USB":
+      tap: $$mdi:usb$$
+    "&out OUT_BLE":
+      tap: $$mdi:bluetooth$$
+    "&bt BT_CLR":
+      tap: $$mdi:bluetooth-off$$
+    "&bt BT_CLR_ALL":
+      tap: $$mdi:close-circle$$
 
   # ZMK
   zmk_keycode_map:
@@ -526,6 +536,15 @@ parse_config:
       hold: zoom
 
   zmk_combos:
+    to_util:
+      align: top
+      offset: 0.1
+    to_code:
+      align: top
+      offset: 0.1
+    softoff:
+      align: top
+      offset: 0.05
     combo_to_2:
       align: top
     combo_to_3:
