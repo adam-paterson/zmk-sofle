@@ -50,7 +50,7 @@
 
         // CODE layer combo: Press L (36) + SEMI (37) together
         to_code {
-            bindings = <&mo 4>;
+            bindings = <&tog 4>;
             key-positions = <36 37>;
             layers = <0>;
         };

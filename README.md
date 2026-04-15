@@ -74,7 +74,9 @@ System utilities, Bluetooth management, and RGB controls.
 | **System** | Reset, Soft Off, Bootloader |
 | **RGB** | RGB Off/On, Effects, Brightness +/-, Speed +/- |
 
-**Access**: Combo - Press **both thumb keys + U** simultaneously
+**Access**: Hold **LOWER** and **RAISE** together
+
+This uses ZMK conditional layers: when layer 1 and layer 2 are both active, layer 3 turns on automatically.
 
 ---
 
@@ -87,7 +89,9 @@ Programming shortcuts for efficient text navigation and editing.
 | **Line Navigation** | Cmd+Left/Right (line start/end) |
 | **Bracket Navigation** | Ctrl+Left/Right (word-level) |
 
-**Access**: Combo - Press **both thumb keys + C** simultaneously
+**Access**: Combo - Press **L + ;** together from the base layer
+
+This is a toggle-style access path for programming shortcuts without needing to hold a thumb layer key.
 
 ---
 
@@ -98,8 +102,8 @@ Combos allow you to press multiple keys together to trigger special actions.
 | Combo | Keys | Action |
 |-------|------|--------|
 | **Soft Off** | Q + S + Z (hold 2 sec) | Enter deep sleep mode |
-| **Util Layer** | Left thumb + Right thumb + U | Access utilities (BT, RGB, system) |
-| **Code Layer** | Left thumb + Right thumb + C | Access programming shortcuts |
+| **Util Layer** | Hold LOWER + RAISE | Access utilities (BT, RGB, system) |
+| **Code Layer** | L + ; | Toggle/access programming shortcuts |
 
 **Note**: The soft off combo requires holding for 2 seconds. To wake from deep sleep, press the reset button once.
 
@@ -130,7 +134,7 @@ This repository includes GitHub Actions workflows for automatic firmware buildin
 
 1. **Push changes** to this repository
 2. **GitHub Actions** automatically builds firmware
-3. **Download artifacts** from the Actions tab
+3. **Download firmware** from the latest GitHub Release
 4. **Flash** the `.uf2` files to your keyboard
 
 ### Manual Build
