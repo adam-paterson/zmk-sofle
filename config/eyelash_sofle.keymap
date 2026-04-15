@@ -47,6 +47,13 @@
             bindings = <&soft_off>;
             key-positions = <14 28 40>;
         };
+
+        // CODE layer combo: Press L (36) + SEMI (37) together
+        to_code {
+            bindings = <&mo 4>;
+            key-positions = <36 37>;
+            layers = <0>;
+        };
     };
 
     // Conditional layers: When both LOWER (1) and RAISE (2) are active, activate UTIL (3)
@@ -128,6 +135,19 @@
             >;
 
             display-name = "UTIL";
+            sensor-bindings = <&scroll_encoder>;
+        };
+
+        code {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_UP     &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_DOWN   &kp LG(LEFT)  &kp LG(RIGHT)  &trans  &trans  &trans  &trans
+&trans  &kp LA(LEFT)  &kp LA(RIGHT)  &kp LC(LEFT)  &kp LC(RIGHT)  &trans    &mmv MOVE_LEFT   &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_RIGHT  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &mkp LCLK        &trans  &trans  &trans  &trans  &trans
+            >;
+
+            display-name = "CODE";
             sensor-bindings = <&scroll_encoder>;
         };
     };
