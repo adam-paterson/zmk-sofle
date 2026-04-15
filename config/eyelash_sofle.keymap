@@ -47,12 +47,15 @@
             bindings = <&soft_off>;
             key-positions = <14 28 40>;
         };
+    };
 
-        // UTIL layer: Press LOWER + RAISE together (standard Adjust layer pattern)
-        to_util {
-            bindings = <&mo 3>;
-            key-positions = <56 60>;
-            layers = <0 1 2>;
+    // Conditional layers: When both LOWER (1) and RAISE (2) are active, activate UTIL (3)
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        util_layer {
+            if-layers = <1 2>;
+            then-layer = <3>;
         };
     };
 
@@ -125,19 +128,6 @@
             >;
 
             display-name = "UTIL";
-            sensor-bindings = <&scroll_encoder>;
-        };
-
-        code {
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_UP     &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_DOWN   &kp LG(LEFT)  &kp LG(RIGHT)  &trans  &trans  &trans  &trans
-&trans  &kp LA(LEFT)  &kp LA(RIGHT)  &kp LC(LEFT)  &kp LC(RIGHT)  &trans    &mmv MOVE_LEFT   &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &mmv MOVE_RIGHT  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &mkp LCLK        &trans  &trans  &trans  &trans  &trans
-            >;
-
-            display-name = "CODE";
             sensor-bindings = <&scroll_encoder>;
         };
     };
