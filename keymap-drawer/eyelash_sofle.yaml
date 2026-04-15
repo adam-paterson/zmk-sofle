@@ -297,8 +297,8 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -331,7 +331,7 @@ combos:
   a: top
   o: 0.05
 - p: [36, 37]
-  k: CODE
+  k: {t: CODE, h: toggle}
   l: [BASE]
   a: top
   o: 0.1

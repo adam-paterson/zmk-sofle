@@ -726,7 +726,8 @@ rect.combo {
 <rect rx="8" ry="8" x="741" y="92" width="26" height="24" class="combo"/>
 <a href="#CODE">
 <text x="754" y="104" class="combo tap layer-activator">CODE</text>
-</a></g>
+</a><text x="754" y="114" class="combo hold">toggle</text>
+</g>
 </g>
 </g>
 <g transform="translate(35, 359)" class="layer-LOWER">
@@ -1961,13 +1962,15 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
 <use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
-<g transform="translate(728, 136)" class="key held keypos-36">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
+<g transform="translate(728, 136)" class="key trans keypos-36">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
+<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
-<g transform="translate(780, 156)" class="key held keypos-37">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
+<g transform="translate(780, 156)" class="key trans keypos-37">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
+<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
 <g transform="translate(832, 156)" class="key trans keypos-38">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
