@@ -42,6 +42,9 @@
 <svg id="mdi:close-circle">
 <svg xmlns="http://www.w3.org/2000/svg" id="mdi-close-circle" viewBox="0 0 24 24"><path d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" /></svg>
 </svg>
+<svg id="mdi:code-braces">
+<svg xmlns="http://www.w3.org/2000/svg" id="mdi-code-braces" viewBox="0 0 24 24"><path d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z" /></svg>
+</svg>
 <svg id="mdi:content-copy">
 <svg xmlns="http://www.w3.org/2000/svg" id="mdi-content-copy" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" /></svg>
 </svg>
@@ -601,6 +604,7 @@ rect.combo {
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
 <text x="0" y="-4" class="key tap">C</text>
+<use href="#mdi:code-braces" xlink:href="#mdi:code-braces" x="-8" y="7" height="15" width="15.0" class="key hold glyph mdi:code-braces"/>
 </g>
 <g transform="translate(234, 188)" class="key keypos-43">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
@@ -726,13 +730,6 @@ rect.combo {
 <rect rx="8" ry="8" x="416" y="219" width="26" height="24" class="combo"/>
 <a href="#UTIL">
 <text x="429" y="231" class="combo tap layer-activator">UTIL</text>
-</a></g>
-<g class="combo combopos-2">
-<path d="M237,150 h47 a8.0,8.0 0 0 1 8.0,8.0 v88" class="combo"/>
-<path d="M237,150 h-47 a8.0,8.0 0 0 0 -8.0,8.0 v7" class="combo"/>
-<rect rx="8" ry="8" x="224" y="138" width="26" height="24" class="combo"/>
-<a href="#CODE">
-<text x="237" y="150" class="combo tap layer-activator">CODE</text>
 </a></g>
 </g>
 </g>
@@ -2000,9 +1997,10 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
 <use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
-<g transform="translate(182, 182)" class="key held keypos-42">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
+<g transform="translate(182, 182)" class="key trans keypos-42">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
+<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
 <g transform="translate(234, 188)" class="key trans keypos-43">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
@@ -2070,10 +2068,10 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
 <use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
-<g transform="translate(292, 263) rotate(30.0)" class="key held keypos-56">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
-<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:mouse-left-click-outline"/>
+<g transform="translate(292, 263) rotate(30.0)" class="key keypos-56">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
+<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:mouse-left-click-outline"/>
 </g>
 <g transform="translate(361, 273) rotate(30.0)" class="key trans keypos-57">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
