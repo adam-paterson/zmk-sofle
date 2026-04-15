@@ -50,12 +50,14 @@
 
         to_util {
             bindings = <&mo 3>;
-            key-positions = <55 60 21>;
+            key-positions = <56 60>;
+            layers = <0>;
         };
 
         to_code {
             bindings = <&mo 4>;
-            key-positions = <55 60 42>;
+            key-positions = <56 42>;
+            layers = <0>;
         };
     };
 
