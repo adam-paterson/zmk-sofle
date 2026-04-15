@@ -197,6 +197,9 @@ parse_config:
     "&ltq 1 DELETE":
       tap: $$mdi:backspace-reverse-outline$$
       hold: $$mdi:navigation-variant$$
+    "&lt 4 C":
+      tap: C
+      hold: $$mdi:code-braces$$
     # Home rows
     "&hm LEFT_GUI A":
       tap: 'A'
