@@ -651,27 +651,26 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key enter"/>
 <use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key enter tap glyph mdi:keyboard-return"/>
 </g>
-<g transform="translate(364, 202)" class="key keypos-52">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<text x="0" y="-4" class="key tap">LGUI</text>
+<g transform="translate(364, 202)" class="key trans keypos-52">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
+<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
 <g transform="translate(130, 240)" class="key keypos-53">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<use href="#mdi:apple-keyboard-option" xlink:href="#mdi:apple-keyboard-option" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-option"/>
+<text x="0" y="-4" class="key tap">LGUI</text>
 </g>
 <g transform="translate(182, 234)" class="key keypos-54">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
+<use href="#mdi:apple-keyboard-option" xlink:href="#mdi:apple-keyboard-option" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-option"/>
 </g>
 <g transform="translate(234, 240)" class="key keypos-55">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
-<a href="#LOWER">
-<text x="0" y="-4" class="key tap layer-activator">LOWER</text>
-</a></g>
+<use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
+</g>
 <g transform="translate(292, 263) rotate(30.0)" class="key keypos-56">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
@@ -1037,14 +1036,15 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
 <use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
-<g transform="translate(234, 240)" class="key held keypos-55">
+<g transform="translate(234, 240)" class="key trans keypos-55">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
+<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
+</g>
+<g transform="translate(292, 263) rotate(30.0)" class="key held keypos-56">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held side"/>
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held"/>
-</g>
-<g transform="translate(292, 263) rotate(30.0)" class="key held alternate keypos-56">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key held alternate side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key held alternate"/>
-<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key held alternate tap glyph mdi:mouse-left-click-outline"/>
+<use href="#mdi:mouse-left-click-outline" xlink:href="#mdi:mouse-left-click-outline" x="-9" y="-13" height="18" width="18.0" class="key held tap glyph mdi:mouse-left-click-outline"/>
 </g>
 <g transform="translate(361, 273) rotate(30.0)" class="key trans keypos-57">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
