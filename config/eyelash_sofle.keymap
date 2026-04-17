@@ -105,7 +105,7 @@
 &trans      &trans           &trans           &trans           &trans       &trans       &mmv MOVE_UP     &trans     &trans     &trans     &trans           &trans      &trans
 &kp ESC     &kp LA(LEFT)     &kp UP_ARROW     &kp LA(RIGHT)    &trans       &trans       &mmv MOVE_DOWN   &kp PG_UP  &trans     &kp UP     &trans           &kp N0      &kp BSPC
 &kp TAB     &kp LEFT_ARROW   &kp DOWN_ARROW   &kp RIGHT_ARROW  &trans       &trans       &mmv MOVE_LEFT   &kp PG_DN  &kp LEFT   &kp DOWN   &kp RIGHT        &kp DEL     &kp BSPC
-&kp LSHFT   &kp LGUI(Z)      &kp LGUI(X)      &kp LGUI(C)      &kp LGUI(V)  &trans       &mmv MOVE_RIGHT  &trans     &trans     &trans     &trans           &trans      &trans
+&kp LSHFT   &kp LG(Z)        &kp LG(X)        &kp LG(C)        &kp LG(V)  &trans       &mmv MOVE_RIGHT  &trans     &trans     &trans     &trans           &trans      &trans
 &kp C_MUTE  &kp LCTRL        &kp LALT         &kp LCMD         &mo 1        &kp SPACE    &mkp LCLK        &kp ENTER  &mo 2      &kp LCMD   &kp RALT         &kp LCTRL
             >;
 
