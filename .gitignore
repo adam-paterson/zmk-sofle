@@ -1,6 +1,10 @@
+direnv
 build/
 zmk/
 modules/
 tools/
 .west/
 .zmk/
+/.direnv
+/.keymap-drawer/lib/python3.13/site-packages
+/.mise
