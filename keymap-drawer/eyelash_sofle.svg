@@ -1,4 +1,4 @@
-<svg width="928" height="1841" viewBox="0 0 928 1841" class="keymap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="928" height="1843" viewBox="0 0 928 1843" class="keymap" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs>/* start glyphs */
 <svg id="mdi:apple-keyboard-command">
 <svg xmlns="http://www.w3.org/2000/svg" id="mdi-apple-keyboard-command" viewBox="0 0 24 24"><path d="M6,2A4,4 0 0,1 10,6V8H14V6A4,4 0 0,1 18,2A4,4 0 0,1 22,6A4,4 0 0,1 18,10H16V14H18A4,4 0 0,1 22,18A4,4 0 0,1 18,22A4,4 0 0,1 14,18V16H10V18A4,4 0 0,1 6,22A4,4 0 0,1 2,18A4,4 0 0,1 6,14H8V10H6A4,4 0 0,1 2,6A4,4 0 0,1 6,2M16,18A2,2 0 0,0 18,20A2,2 0 0,0 20,18A2,2 0 0,0 18,16H16V18M14,10H10V14H14V10M6,16A2,2 0 0,0 4,18A2,2 0 0,0 6,20A2,2 0 0,0 8,18V16H6M8,6A2,2 0 0,0 6,4A2,2 0 0,0 4,6A2,2 0 0,0 6,8H8V6M18,8A2,2 0 0,0 20,6A2,2 0 0,0 18,4A2,2 0 0,0 16,6V8H18Z" /></svg>
@@ -703,15 +703,15 @@ rect.combo {
 <use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
 </g>
 <g class="combo combopos-0">
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
-<path d="M95,74 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
-<rect rx="8" ry="8" x="82" y="62" width="26" height="24" class="combo"/>
-<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="65" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
+<path d="M95,75 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
+<rect rx="8" ry="8" x="82" y="63" width="26" height="24" class="combo"/>
+<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="66" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
 </g>
 </g>
 </g>
-<g transform="translate(35, 358)" class="layer-SYMS">
+<g transform="translate(35, 359)" class="layer-SYMS">
 <text x="0" y="25" class="label" id="SYMS">SYMS:</text>
 <g transform="translate(0, 50)">
 <g transform="translate(26, 52)" class="key trans keypos-0">
@@ -1059,11 +1059,11 @@ rect.combo {
 <use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
 </g>
 <g class="combo combopos-0">
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
-<path d="M95,74 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
-<rect rx="8" ry="8" x="82" y="62" width="26" height="24" class="combo"/>
-<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="65" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
+<path d="M95,75 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
+<rect rx="8" ry="8" x="82" y="63" width="26" height="24" class="combo"/>
+<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="66" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
 </g>
 </g>
 </g>
@@ -1408,15 +1408,15 @@ rect.combo {
 <use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
 </g>
 <g class="combo combopos-0">
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
-<path d="M95,74 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
-<rect rx="8" ry="8" x="82" y="62" width="26" height="24" class="combo"/>
-<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="65" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
+<path d="M95,75 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
+<rect rx="8" ry="8" x="82" y="63" width="26" height="24" class="combo"/>
+<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="66" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
 </g>
 </g>
 </g>
-<g transform="translate(35, 1075)" class="layer-UTIL">
+<g transform="translate(35, 1076)" class="layer-UTIL">
 <text x="0" y="25" class="label" id="UTIL">UTIL:</text>
 <g transform="translate(0, 50)">
 <g transform="translate(26, 52)" class="key keypos-0">
@@ -1763,15 +1763,15 @@ rect.combo {
 <use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
 </g>
 <g class="combo combopos-0">
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
-<path d="M95,74 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
-<rect rx="8" ry="8" x="82" y="62" width="26" height="24" class="combo"/>
-<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="65" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
+<path d="M95,75 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
+<rect rx="8" ry="8" x="82" y="63" width="26" height="24" class="combo"/>
+<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="66" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
 </g>
 </g>
 </g>
-<g transform="translate(35, 1433)" class="layer-CODE">
+<g transform="translate(35, 1434)" class="layer-CODE">
 <text x="0" y="25" class="label" id="CODE">CODE:</text>
 <g transform="translate(0, 50)">
 <g transform="translate(26, 52)" class="key trans keypos-0">
@@ -2107,11 +2107,11 @@ rect.combo {
 <use href="#mdi:apple-keyboard-control" xlink:href="#mdi:apple-keyboard-control" x="-9" y="-13" height="18" width="18.0" class="key tap glyph mdi:apple-keyboard-control"/>
 </g>
 <g class="combo combopos-0">
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
-<path d="M95,74 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
-<path d="M95,74 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
-<rect rx="8" ry="8" x="82" y="62" width="26" height="24" class="combo"/>
-<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="65" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v4" class="combo"/>
+<path d="M95,75 h27 a8.0,8.0 0 0 1 8.0,8.0 v37" class="combo"/>
+<path d="M95,75 h-9 a8.0,8.0 0 0 0 -8.0,8.0 v108" class="combo"/>
+<rect rx="8" ry="8" x="82" y="63" width="26" height="24" class="combo"/>
+<use href="#mdi:power-standby" xlink:href="#mdi:power-standby" x="86" y="66" height="18" width="18.0" class="combo tap glyph mdi:power-standby"/>
 </g>
 </g>
 </g>
