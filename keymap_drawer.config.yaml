@@ -40,15 +40,15 @@ draw_config:
       stroke-width: 1.5;
     }
 
-    /* Lower layer - blue accent */
-    g.layer-LOWER rect.key {
+    /* Symbols layer - blue accent */
+    g.layer-SYMS rect.key {
       fill: #eff6ff;
       stroke: #3b82f6;
       stroke-width: 1.5;
     }
 
-    /* Raise layer - green accent */
-    g.layer-RAISE rect.key {
+    /* Navigation layer - green accent */
+    g.layer-NAV rect.key {
       fill: #f0fdf4;
       stroke: #22c55e;
       stroke-width: 1.5;
@@ -181,49 +181,15 @@ parse_config:
     type: trans
 
   raw_binding_map:
-    # Layers
-    "&ltq 1 BACKSPACE":
-      tap:  $$mdi:backspace$$
-      hold: '$$mdi:navigation-variant$$'
-    "&ltq 3 TAB":
-      tap: $$mdi:keyboard-tab$$
-      hold: $$mdi:numeric$$
-    "&ltq 2 SPACE":
+    "&lt 1 SPACE":
       tap: $$mdi:keyboard-space$$
-      hold: $$mdi:symbol$$
-    "&ltq 3 ENTER":
+      hold: SYMS
+    "&lt 2 ENTER":
       tap: $$mdi:keyboard-return$$
-      hold: $$mdi:numeric$$
-    "&ltq 1 DELETE":
-      tap: $$mdi:backspace-reverse-outline$$
-      hold: $$mdi:navigation-variant$$
-    # Home rows
-    "&hm LEFT_GUI A":
-      tap: 'A'
-      shifted: $$mdi:apple-keyboard-command$$
-    "&hm LEFT_ALT S":
-      tap: 'S'
-      shifted: $$mdi:apple-keyboard-option$$
-    "&hm LEFT_CONTROL D":
-      tap: 'D'
-      shifted: $$mdi:apple-keyboard-control$$
-    "&hm LEFT_SHIFT F":
-      tap: 'F'
-      shifted: $$mdi:apple-keyboard-shift$$
-    "&hm RIGHT_SHIFT J":
-      tap: 'J'
-      shifted: $$mdi:apple-keyboard-shift$$
-    "&hm RIGHT_CONTROL K":
-      tap: 'K'
-      shifted: $$mdi:apple-keyboard-control$$
-    "&hm RIGHT_ALT L":
-      tap: 'L'
-      shifted: $$mdi:apple-keyboard-option$$
-    # self behaviors
-    "&hm LG(LS(V)) P":
-      tap: 'P'
-      shifted: $$mdi:content-copy$$
-    # Mouse
+      hold: NAV
+    "&lt 4 LCMD":
+      tap: $$mdi:apple-keyboard-command$$
+      hold: CODE
     "&msc SCRL_UP":
       tap: $$mdi:pan-up$$
       hold: ''

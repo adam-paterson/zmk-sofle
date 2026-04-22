@@ -2,9 +2,15 @@ direnv
 build/
 zmk/
 modules/
+zephyr/
 tools/
 .west/
 .zmk/
 /.direnv
-/.keymap-drawer/lib/python3.13/site-packages
+/.keymap-drawer/
 /.mise
+.zmk-python/
+.venv/
+uv.lock
+eyelash_sofle/
+.DS_Store

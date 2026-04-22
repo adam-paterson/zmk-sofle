@@ -6,7 +6,7 @@
 if BOARD_EYELASH_SOFLE_LEFT
 
 config ZMK_KEYBOARD_NAME
-    default "Eyelash Sofle"
+    default "Adam's Sofle"
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
