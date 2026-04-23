@@ -1,4 +1,3 @@
-direnv
 build/
 zmk/
 modules/
@@ -6,11 +5,9 @@ zephyr/
 tools/
 .west/
 .zmk/
-/.direnv
-/.keymap-drawer/
-/.mise
+.direnv
+.keymap-drawer
 .zmk-python/
 .venv/
-uv.lock
 eyelash_sofle/
 .DS_Store

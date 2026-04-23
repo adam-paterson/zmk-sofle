@@ -922,10 +922,11 @@ rect.combo {
 <rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key enter"/>
 <use href="#mdi:keyboard-return" xlink:href="#mdi:keyboard-return" x="-9" y="-13" height="18" width="18.0" class="key enter tap glyph mdi:keyboard-return"/>
 </g>
-<g transform="translate(26, 208)" class="key trans keypos-39">
-<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key trans side"/>
-<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key trans"/>
-<use href="#mdi:transfer" xlink:href="#mdi:transfer" x="-9" y="-13" height="18" width="18.0" class="key trans tap glyph mdi:transfer"/>
+<g transform="translate(26, 208)" class="key keypos-39">
+<rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>
+<rect rx="4" ry="4" x="-18" y="-22" width="36" height="36" class="key"/>
+<text x="0" y="-4" class="key tap">`</text>
+<text x="0" y="-22" class="key shifted">~</text>
 </g>
 <g transform="translate(78, 208)" class="key keypos-40">
 <rect rx="8" ry="8" x="-24" y="-24" width="48" height="48" class="key side"/>

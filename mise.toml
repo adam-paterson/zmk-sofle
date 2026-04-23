@@ -1,17 +1,12 @@
 [settings]
 experimental = true
 
-[tool_alias]
-west = "pipx:west"
-keymap-drawer = "pipx:keymap-drawer"
-
 [tools]
 python = "3.13"
 uv = "latest"
 cmake = "latest"
 ninja = "latest"
-west = "latest"
-keymap-drawer = "latest"
+protobuf = "latest"
 
 [tasks.setup]
 description = "Initialize the local west workspace and fetch ZMK dependencies"
@@ -22,11 +17,11 @@ set -euo pipefail
 echo "Firmware builds require the Zephyr SDK or an equivalent arm-none-eabi toolchain installed on macOS."
 
 if [ ! -d .west ]; then
-  west init -l config
+  uv run west init -l config
 fi
 
-west update
-west zephyr-export
+uv run west update
+uv run west zephyr-export
 '''
 
 [tasks.update]
@@ -36,11 +31,11 @@ run = '''
 set -euo pipefail
 
 if [ ! -d .west ]; then
-  west init -l config
+  uv run west init -l config
 fi
 
-west update
-west zephyr-export
+uv run west update
+uv run west zephyr-export
 '''
 
 [tasks.draw]
@@ -59,8 +54,8 @@ run = '''
 set -euo pipefail
 
 mkdir -p keymap-drawer
-keymap -c keymap_drawer.config.yaml parse -z config/eyelash_sofle.keymap > keymap-drawer/eyelash_sofle.yaml
-keymap -c keymap_drawer.config.yaml draw keymap-drawer/eyelash_sofle.yaml -o keymap-drawer/eyelash_sofle.svg
+uv run keymap -c keymap_drawer.config.yaml parse -z config/eyelash_sofle.keymap > keymap-drawer/eyelash_sofle.yaml
+uv run keymap -c keymap_drawer.config.yaml draw keymap-drawer/eyelash_sofle.yaml -o keymap-drawer/eyelash_sofle.svg
 '''
 
 [tasks.clean]
@@ -69,5 +64,5 @@ run = '''
 #!/usr/bin/env bash
 set -euo pipefail
 
-rm -rf build .west .zmk .keymap-drawer .zmk-python zmk modules zephyr eyelash_sofle
+rm -rf build .venv .west .zmk .keymap-drawer .zmk-python zmk modules zephyr eyelash_sofle
 '''

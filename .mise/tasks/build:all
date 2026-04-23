@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Build both left and right firmware"
+
+set -euo pipefail
+
+mise run build left
+mise run build right
