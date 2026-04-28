@@ -1,0 +1,162 @@
+name: Validate Keymaps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "config/**"
+      - ".github/workflows/validate.yml"
+  pull_request:
+    paths:
+      - "config/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install keymap-drawer
+        run: pip install keymap-drawer
+
+      - name: Validate keymap syntax
+        run: |
+          set -e
+          echo "Validating keymap files..."
+
+          # Find all .keymap files
+          for keymap in config/*.keymap; do
+            if [ -f "$keymap" ]; then
+              echo "Checking: $keymap"
+
+              # Get the base name for the corresponding JSON file
+              basename=$(basename "$keymap" .keymap)
+              json_file="config/${basename}.json"
+
+              if [ -f "$json_file" ]; then
+                echo "  - Found layout: $json_file"
+
+                # Try to parse the keymap
+                if keymap -c keymap_drawer.config.yaml parse -z "$keymap" > /dev/null 2>&1; then
+                  echo "  ✓ Syntax valid"
+                else
+                  echo "  ✗ Syntax error in $keymap"
+                  keymap -c keymap_drawer.config.yaml parse -z "$keymap" || true
+                  exit 1
+                fi
+              else
+                echo "  ⚠ No layout JSON found for $keymap"
+              fi
+            fi
+          done
+
+          echo ""
+          echo "All keymap files validated successfully!"
+
+      - name: Check JSON layout files
+        run: |
+          set -e
+          echo "Validating JSON layout files..."
+
+          for json in config/*.json; do
+            if [ -f "$json" ]; then
+              echo "Checking: $json"
+
+              # Validate JSON syntax
+              if python3 -c "import json; json.load(open('$json'))" 2>/dev/null; then
+                echo "  ✓ JSON syntax valid"
+              else
+                echo "  ✗ JSON syntax error in $json"
+                python3 -c "import json; json.load(open('$json'))"
+                exit 1
+              fi
+
+              # Check required fields
+              if python3 << EOF
+import json
+import sys
+
+with open('$json') as f:
+    data = json.load(f)
+
+required = ['id', 'name', 'layouts']
+for field in required:
+    if field not in data:
+        print(f"  ✗ Missing required field: {field}")
+        sys.exit(1)
+
+# Check layout structure
+if 'layouts' in data and 'default_layout' in data['layouts']:
+    layout = data['layouts']['default_layout']
+    if 'layout' not in layout:
+        print("  ✗ Missing layout array in default_layout")
+        sys.exit(1)
+    else:
+        print(f"  ✓ Layout has {len(layout['layout'])} keys defined")
+else:
+    print("  ⚠ No default_layout found")
+
+print("  ✓ Structure valid")
+EOF
+              then
+                echo "  ✓ Layout structure valid"
+              else
+                echo "  ✗ Layout structure error"
+                exit 1
+              fi
+            fi
+          done
+
+          echo ""
+          echo "All JSON layout files validated successfully!"
+
+      - name: Check for orphaned files
+        run: |
+          echo "Checking for orphaned keymap/layout files..."
+
+          # Find keymaps without JSON
+          for keymap in config/*.keymap; do
+            if [ -f "$keymap" ]; then
+              basename=$(basename "$keymap" .keymap)
+              json_file="config/${basename}.json"
+
+              if [ ! -f "$json_file" ]; then
+                echo "  ⚠ Keymap without JSON: $keymap"
+              fi
+            fi
+          done
+
+          # Find JSON without keymaps
+          for json in config/*.json; do
+            if [ -f "$json" ]; then
+              basename=$(basename "$json" .json)
+              keymap_file="config/${basename}.keymap"
+
+              if [ ! -f "$keymap_file" ]; then
+                echo "  ⚠ JSON without keymap: $json"
+              fi
+            fi
+          done
+
+          echo ""
+          echo "Orphan check complete!"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "==================================="
+          echo "Keymap Validation Summary"
+          echo "==================================="
+          echo "Validated keymap files:"
+          ls -1 config/*.keymap 2>/dev/null || echo "  None found"
+          echo ""
+          echo "Validated layout files:"
+          ls -1 config/*.json 2>/dev/null || echo "  None found"
+          echo ""
+          echo "==================================="

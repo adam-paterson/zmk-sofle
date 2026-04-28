@@ -1,0 +1,130 @@
+// Template keymap for new keyboards
+// Copy this file and customize for your specific keyboard layout
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/ext_power.h>
+
+// Include miryoku base definitions
+#include "../miryoku_zmk/miryoku/miryoku.h"
+
+// Layer indices
+#define BASE 0
+#define SYMS 1
+#define NAV 2
+#define UTIL 3
+#define CODE 4
+
+// Behavior aliases for readability
+#define HR_LGUI(name, key) &mt LGUI key  // Home row - Left GUI
+#define HR_LALT(name, key) &mt LALT key  // Home row - Left Alt
+#define HR_LCTL(name, key) &mt LCTRL key // Home row - Left Control
+#define HR_LSFT(name, key) &mt LSHFT key // Home row - Left Shift
+#define HR_RGUI(name, key) &mt RGUI key  // Home row - Right GUI
+#define HR_RALT(name, key) &mt RALT key  // Home row - Right Alt
+#define HR_RCTL(name, key) &mt RCTRL key // Home row - Right Control
+#define HR_RSFT(name, key) &mt RSHFT key // Home row - Right Shift
+
+// Layer-tap aliases
+#define LT_SYMS &lt SYMS
+#define LT_NAV &lt NAV
+#define LT_UTIL &lt UTIL
+#define LT_CODE &lt CODE
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        // Base layer: QWERTY with home-row mods
+        // Customize for your preferred alpha layout (Colemak, Dvorak, etc.)
+        BASE {
+            display-name = "BASE";
+            bindings = <
+                // Top row: Numbers and function keys
+                &kp ESC   &kp N1    &kp N2    &kp N3    &kp N4    &kp N5                          &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    &kp BSPC
+                // Home row: QWERTY + home-row mods
+                &kp TAB   &kp Q     HR_LGUI(A, A) HR_LALT(S, S) HR_LCTL(D, D) HR_LSFT(F, F) &kp G     &kp H     HR_RSFT(J, J) HR_RCTL(K, K) HR_RALT(L, L) HR_RGUI(SQT, SQT) &kp SEMI
+                // Bottom row: ZXCV + modifiers
+                &kp LSHFT &kp Z     &kp X     &kp C     &kp V     &kp B                           &kp N     &kp M     &kp COMMA &kp DOT   &kp SLASH &kp RSHFT
+                // Thumb cluster: Layer taps + space/enter
+                &kp LCTRL &kp LALT  &kp LGUI  LT_SYMS RET  LT_NAV SPACE                     LT_CODE TAB  &kp RGUI  &kp RALT  &kp RCTRL
+            >;
+        };
+
+        // Symbols layer: F-keys, numbers, brackets
+        SYMS {
+            display-name = "SYMS";
+            bindings = <
+                &trans    &kp F1    &kp F2    &kp F3    &kp F4    &kp F5                          &kp F6    &kp F7    &kp F8    &kp F9    &kp F10   &kp F11
+                &trans    &kp N1    &kp N2    &kp N3    &kp N4    &kp N5                          &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    &kp F12
+                &trans    &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT                       &kp CARET &kp AMPS  &kp STAR  &kp LPAR  &kp RPAR  &trans
+                &trans    &trans    &trans    &trans    &mo UTIL  &trans                          &trans    &mo UTIL  &trans    &trans    &trans    &trans
+            >;
+        };
+
+        // Navigation layer: Arrows, clipboard, page navigation
+        NAV {
+            display-name = "NAV";
+            bindings = <
+                &trans    &trans    &trans    &trans    &trans    &trans                          &trans    &trans    &trans    &trans    &trans    &trans
+                &kp ESC   &kp HOME  &kp PG_UP &kp UP    &kp PG_DN &kp END                         &trans    &trans    &kp UP    &trans    &trans    &kp BSPC
+                &trans    &trans    &trans    &kp DOWN  &trans    &trans                          &trans    &kp LEFT  &kp DOWN  &kp RIGHT &trans    &trans
+                &trans    &trans    &trans    &trans    &mo UTIL  &trans                          &trans    &mo UTIL  &trans    &trans    &trans    &trans
+            >;
+        };
+
+        // Utilities layer: Bluetooth, RGB, system controls
+        // Activated by holding both SYMS and NAV
+        UTIL {
+            display-name = "UTIL";
+            bindings = <
+                &trans    &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4           &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &bt BT_CLR &trans    &trans    &trans    &trans                          &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans                          &trans    &trans    &trans    &trans    &trans    &trans
+                &bootloader &trans  &trans    &trans    &trans    &trans                          &trans    &trans    &trans    &trans    &trans    &sys_reset
+            >;
+        };
+
+        // Code layer: macOS programming shortcuts
+        // Hold outer Command thumb key to activate
+        CODE {
+            display-name = "CODE";
+            bindings = <
+                &trans    &trans    &trans    &trans    &trans    &trans                          &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans                          &kp LC(LEFT) &kp LA(LEFT) &kp UP &kp LA(RIGHT) &kp LC(RIGHT) &kp LA(BSPC)
+                &trans    &trans    &trans    &trans    &trans    &trans                          &kp LS(LC(LEFT)) &kp LS(LA(LEFT)) &kp DOWN &kp LS(LA(RIGHT)) &kp LS(LC(RIGHT)) &trans
+                &trans    &trans    &trans    &trans    &trans    &trans                          &trans    &kp BSPC  &kp DEL   &trans    &trans    &trans
+            >;
+        };
+    };
+
+    // Combos: Multi-key chords for special functions
+    combos {
+        compatible = "zmk,combos";
+
+        // Example: Deep sleep combo (hold these keys together)
+        combo_sleep {
+            timeout-ms = <2000>;              // 2 second hold required
+            key-positions = <0 1 2>;          // Key positions (customize for your matrix)
+            bindings = <&kp C_SLEEP>;
+            layers = <BASE>;
+        };
+
+        // Example: Quick ESC combo (adjacent keys)
+        combo_esc {
+            timeout-ms = <50>;
+            key-positions = <10 11>;          // Customize for your matrix
+            bindings = <&kp ESC>;
+            layers = <BASE>;
+        };
+    };
+};
+
+// Sensor configuration (for encoders)
+&sensors {
+    sensors = <&left_encoder &right_encoder>;
+    triggers-per-rotation = <20>;
+};

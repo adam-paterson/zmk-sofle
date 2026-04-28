@@ -5,6 +5,10 @@
 
 This repo is a cleaned-up ZMK user-config for a custom Sofle board. The local `boards/` tree is the source of truth for the board definition, `config/` holds the active firmware configuration, and `keymap-drawer/` contains committed diagram output derived from the active keymap.
 
+📚 **Documentation**: See [`docs/keymap-management.md`](docs/keymap-management.md) for the complete keymap organization strategy, layer conventions, and miryoku integration details.
+
+🚀 **New Keyboards**: Use the [`template/`](template/) directory to quickly add new keyboards following the established conventions.
+
 ## Layout
 
 - `BASE`: everyday QWERTY typing
@@ -91,7 +95,19 @@ The build tasks prefer GNU Arm Embedded automatically when `arm-none-eabi-gcc` i
 
 ![Adam's Sofle keymap](keymap-drawer/eyelash_sofle.svg)
 
-The committed diagram is generated from `config/eyelash_sofle.keymap`, not edited by hand.
+The committed diagram is generated from `config/eyelash_sofle.keymap`, not edited by hand. See [`docs/keymap-management.md`](docs/keymap-management.md#keymap-drawer-workflow) for details on the keymap-drawer workflow.
+
+## CI Workflows
+
+Three GitHub Actions workflows manage the repository:
+
+| Workflow | File | Purpose |
+|----------|------|---------|
+| Build | `.github/workflows/build.yml` | Build ZMK firmware and create releases |
+| Draw | `.github/workflows/draw.yml` | Auto-generate keymap diagrams |
+| Validate | `.github/workflows/validate.yml` | Validate keymap syntax and structure |
+
+The validate workflow runs on every PR and push to ensure keymap files are syntactically correct before merging.
 
 ## Documentation
 
