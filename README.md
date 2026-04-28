@@ -13,6 +13,8 @@ This repo contains ZMK firmware configurations for multiple custom keyboard vari
 
 - **eyelash_sofle** - Custom split keyboard based on Eyelash Sofle
 
+To add a new keyboard, see [docs/ADDING_KEYBOARD.md](docs/ADDING_KEYBOARD.md).
+
 ## Layout (eyelash_sofle)
 
 - `BASE`: everyday QWERTY typing
