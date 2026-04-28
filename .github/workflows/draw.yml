@@ -8,7 +8,8 @@ on:
         default: 'eyelash_sofle'
   push:
     paths:
-      - "config/**"
+      - "firmware/zmk/config/**"
+      - "lib/keymaps/**"
       - .github/workflows/draw.yml
       - keymap_drawer.config.yaml
 
@@ -28,13 +29,39 @@ jobs:
         run: |
           pip install keymap-drawer
 
-      - name: Draw keymap
+      - name: Draw keymap from legacy config
         env:
           KEYBOARD: ${{ github.event.inputs.keyboard || 'eyelash_sofle' }}
         run: |
           mkdir -p keymap-drawer
-          keymap -c keymap_drawer.config.yaml parse -z "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
-          keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
+          # Support both old and new paths
+          if [ -f "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" ]; then
+            keymap -c keymap_drawer.config.yaml parse -z "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
+            keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
+          elif [ -f "firmware/zmk/config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" ]; then
+            keymap -c keymap_drawer.config.yaml parse -z "firmware/zmk/config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
+            keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
+          else
+            echo "Keymap file not found for ${KEYBOARD}"
+            exit 1
+          fi
+
+      - name: Draw keymaps from shared definitions
+        run: |
+          mkdir -p keymap-drawer/output
+          # Process shared keymap definitions if they exist
+          for keymap_file in lib/keymaps/base/*.dtsi lib/keymaps/miryoku/*.dtsi 2>/dev/null; do
+            if [ -f "$keymap_file" ]; then
+              name=$(basename "$keymap_file" .dtsi)
+              echo "Processing shared keymap: $name"
+              # Convert to ZMK format temporarily
+              python3 scripts/keymap-convert.py --input "$keymap_file" --from shared --to zmk --output "/tmp/${name}.keymap" 2>/dev/null || echo "Skipping $name (converter not ready)"
+              if [ -f "/tmp/${name}.keymap" ]; then
+                keymap -c keymap_drawer.config.yaml parse -z "/tmp/${name}.keymap" > "keymap-drawer/output/${name}.yaml" 2>/dev/null || true
+                keymap -c keymap_drawer.config.yaml draw "keymap-drawer/output/${name}.yaml" -o "keymap-drawer/output/${name}.svg" 2>/dev/null || true
+              fi
+            fi
+          done
 
       - name: Commit changes
         run: |

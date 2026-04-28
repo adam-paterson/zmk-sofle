@@ -7,10 +7,16 @@ uv = "latest"
 cmake = "latest"
 ninja = "latest"
 protobuf = "latest"
+dtc = "latest"          # Device tree compiler for ZMK
 
 [env]
 KEYBOARD = { value = "eyelash_sofle", description = "Keyboard variant to build (e.g., eyelash_sofle, sofle_choc)" }
 KEYMAP = { value = "eyelash_sofle", description = "Keymap name to use (defaults to keyboard name)" }
+
+# ============================================================================
+# LEGACY TASKS (backward compatibility - ZMK only)
+# These tasks reference the old directory structure
+# ============================================================================
 
 [tasks.setup]
 description = "Initialize the local west workspace and fetch ZMK dependencies"
@@ -258,4 +264,260 @@ run = '''
 #!/usr/bin/env bash
 echo "Available keyboards in config/keyboards/:"
 ls -1 config/keyboards/ 2>/dev/null || echo "  (none found)"
+'''
+
+# ============================================================================
+# UNIFIED MULTI-FIRMWARE TASKS (new architecture)
+# These tasks work with the new directory structure
+# ============================================================================
+
+[tasks."firmware:setup"]
+description = "Setup all firmware workspaces (ZMK and QMK)"
+depends = ["firmware:setup:zmk", "firmware:setup:qmk"]
+
+[tasks."firmware:setup:zmk"]
+description = "Initialize ZMK west workspace in firmware/zmk/"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd firmware/zmk
+
+if [ ! -d .west ]; then
+  echo "Initializing ZMK west workspace..."
+  uv run west init -l .
+fi
+
+echo "Updating ZMK dependencies..."
+uv run west update
+uv run west zephyr-export
+
+echo "ZMK workspace ready"
+'''
+
+[tasks."firmware:setup:qmk"]
+description = "Setup QMK userspace in firmware/qmk/"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd firmware/qmk
+
+echo "Setting up QMK userspace..."
+
+# Check if qmk_cli is available
+if ! command -v qmk &> /dev/null; then
+  echo "QMK CLI not found. Install with: pip install qmk"
+  echo "Note: QMK support is currently a placeholder. Full implementation pending."
+  exit 0
+fi
+
+qmk setup --yes
+echo "QMK workspace ready (placeholder)"
+'''
+
+[tasks."firmware:build"]
+description = "Build all firmware for all targets"
+depends = ["firmware:build:zmk"]
+# TODO: Add "firmware:build:qmk" when QMK support is ready
+
+[tasks."firmware:build:zmk"]
+description = "Build ZMK firmware from firmware/zmk/build.yaml"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd firmware/zmk
+
+if [ ! -d .west ]; then
+  echo "ZMK workspace not initialized. Run: mise run firmware:setup:zmk"
+  exit 1
+fi
+
+echo "Building ZMK firmware from build.yaml matrix..."
+# Parse build.yaml and build each target
+# For now, delegate to the legacy build command
+uv run west build -s zmk/app -b eyelash_sofle_left -- -DZMK_CONFIG="${PWD}/config" -DBOARD_ROOT="${PWD}"
+uv run west build -s zmk/app -b eyelash_sofle_right -- -DZMK_CONFIG="${PWD}/config" -DBOARD_ROOT="${PWD}"
+'''
+
+[tasks."firmware:build:qmk"]
+description = "Build QMK firmware from firmware/qmk/qmk.json"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Building QMK firmware..."
+echo "Note: QMK support is currently a placeholder. Full implementation pending."
+echo ""
+echo "Target keyboards from qmk.json:"
+cat firmware/qmk/qmk.json | grep -o '"eyelash_[^"]*"' | head -5
+'''
+
+[tasks."firmware:build:sofle"]
+description = "Build Sofle firmware for all supported firmware"
+depends = ["firmware:build:sofle:zmk"]
+# TODO: Add "firmware:build:sofle:qmk" when ready
+
+[tasks."firmware:build:sofle:zmk"]
+description = "Build Sofle ZMK firmware with studio support"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd firmware/zmk
+
+if [ ! -d .west ]; then
+  echo "Initializing ZMK workspace..."
+  uv run west init -l .
+  uv run west update
+  uv run west zephyr-export
+fi
+
+# Check for arm-none-eabi-gcc (preferred) or Zephyr SDK
+if command -v arm-none-eabi-gcc &> /dev/null; then
+  echo "Using GNU Arm Embedded toolchain"
+  export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
+elif [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  echo "Using Zephyr SDK"
+else
+  echo "Warning: No ARM toolchain found. Install arm-none-eabi-gcc or Zephyr SDK."
+  echo "  macOS: brew install arm-none-eabi-gcc"
+  exit 1
+fi
+
+echo "Building Sofle ZMK left half with studio..."
+uv run west build -s zmk/app -d build/left -b eyelash_sofle_left -- \
+  -DZMK_CONFIG="${PWD}/config" \
+  -DBOARD_ROOT="${PWD}" \
+  -DCONFIG_ZMK_STUDIO=y
+
+echo "Building Sofle ZMK right half..."
+uv run west build -s zmk/app -d build/right -b eyelash_sofle_right -- \
+  -DZMK_CONFIG="${PWD}/config" \
+  -DBOARD_ROOT="${PWD}"
+
+echo "Build complete:"
+echo "  Left:  firmware/zmk/build/left/zephyr/zmk.uf2"
+echo "  Right: firmware/zmk/build/right/zephyr/zmk.uf2"
+'''
+
+[tasks."firmware:build:sofle:qmk"]
+description = "Build Sofle QMK firmware"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Building Sofle QMK firmware..."
+echo "Note: QMK support is currently a placeholder."
+'''
+
+# Keymap conversion tasks
+[tasks."keymap:convert"]
+description = "Convert keymaps from shared definitions to firmware formats"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Converting shared keymaps to firmware-specific formats..."
+uv run python scripts/keymap-convert.py --input lib/keymaps --output firmware/
+echo "Conversion complete"
+'''
+
+[tasks."keymap:draw"]
+description = "Regenerate all keymap diagrams from shared definitions"
+sources = [
+  "lib/keymaps/**/*.dtsi",
+  "keymap_drawer.config.yaml",
+]
+outputs = [
+  "keymap-drawer/output/*.svg",
+]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p keymap-drawer/output
+
+# Generate diagrams from shared keymaps
+for keymap_file in lib/keymaps/base/*.dtsi lib/keymaps/miryoku/*.dtsi 2>/dev/null; do
+  if [ -f "$keymap_file" ]; then
+    name=$(basename "$keymap_file" .dtsi)
+    echo "Processing $name..."
+    
+    # Convert to temporary ZMK format for keymap-drawer
+    uv run python scripts/keymap-convert.py --input "$keymap_file" --to zmk --output "/tmp/${name}.keymap"
+    
+    # Generate diagram
+    uv run keymap -c keymap_drawer.config.yaml parse -z "/tmp/${name}.keymap" > "keymap-drawer/output/${name}.yaml"
+    uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/output/${name}.yaml" -o "keymap-drawer/output/${name}.svg"
+  fi
+done
+
+echo "Diagrams generated in keymap-drawer/output/"
+'''
+
+# Utility tasks
+[tasks."firmware:clean"]
+description = "Clean all firmware build artifacts"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Cleaning firmware build artifacts..."
+rm -rf firmware/zmk/build firmware/zmk/.west firmware/qmk/.build
+rm -rf keymap-drawer/output/*.svg
+'''
+
+[tasks."firmware:lint"]
+description = "Lint keymap definitions and configs"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Linting keymap files..."
+
+# Check YAML syntax
+echo "Checking layers.yaml..."
+uv run python -c "import yaml; yaml.safe_load(open('lib/keymaps/layers.yaml'))"
+
+# Check DTSI syntax
+echo "Checking DTSI files..."
+for f in lib/keymaps/**/*.dtsi; do
+  if [ -f "$f" ]; then
+    dtc -I dts -O dtb -o /dev/null "$f" 2>/dev/null || echo "Warning: $f has DTS syntax issues (non-fatal)"
+  fi
+done
+
+echo "Lint complete"
+'''
+
+[tasks."firmware:test"]
+description = "Run tests on keymap conversions"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Running keymap conversion tests..."
+echo "Note: Test suite to be implemented"
+# TODO: Add pytest tests for keymap-convert.py
+'''
+
+[tasks."firmware:list"]
+description = "List available firmware and keyboards"
+run = '''
+#!/usr/bin/env bash
+
+echo "=== Available Firmware ==="
+echo "ZMK targets from firmware/zmk/build.yaml:"
+grep "board:" firmware/zmk/build.yaml | sed 's/.*board: /  - /'
+
+echo ""
+echo "QMK targets from firmware/qmk/qmk.json:"
+grep -o '"eyelash_[^"]*"' firmware/qmk/qmk.json | sed 's/"//g' | sort -u | sed 's/^/  - /'
+
+echo ""
+echo "=== Shared Keymap Definitions ==="
+echo "Available layouts in lib/keymaps/:"
+find lib/keymaps -name "*.dtsi" -exec basename {} .dtsi \; | sed 's/^/  - /'
 '''

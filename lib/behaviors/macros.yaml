@@ -1,0 +1,45 @@
+# lib/behaviors/macros.yaml
+# Macro definitions shared across firmwares
+
+macro_definitions:
+  # Screenshot macros
+  - name: screenshot_region
+    bindings:
+      - &kp LGUI
+      - &kp LSHIFT
+      - &kp N4
+    description: macOS screenshot region (Cmd+Shift+4)
+
+  - name: screenshot_full
+    bindings:
+      - &kp LGUI
+      - &kp LSHIFT
+      - &kp N3
+    description: macOS screenshot full (Cmd+Shift+3)
+
+  # Undo/Redo
+  - name: undo
+    bindings:
+      - &kp LGUI
+      - &kp Z
+    description: Undo (Cmd+Z)
+
+  - name: redo
+    bindings:
+      - &kp LGUI
+      - &kp LSHIFT
+      - &kp Z
+    description: Redo (Cmd+Shift+Z)
+
+  # Copy/Paste
+  - name: copy
+    bindings:
+      - &kp LGUI
+      - &kp C
+    description: Copy (Cmd+C)
+
+  - name: paste
+    bindings:
+      - &kp LGUI
+      - &kp V
+    description: Paste (Cmd+V)

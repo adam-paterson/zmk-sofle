@@ -1,0 +1,20 @@
+{
+  "userspace_version": "1.0",
+  "build_targets": {
+    "eyelash_sofle": {
+      "default": {
+        "keyboard": "eyelash_sofle",
+        "keymap": "default"
+      },
+      "miryoku": {
+        "keyboard": "eyelash_sofle",
+        "keymap": "miryoku"
+      }
+    }
+  },
+  "keyboards": {
+    "eyelash_sofle": {
+      "keymaps": ["default", "miryoku"]
+    }
+  }
+}

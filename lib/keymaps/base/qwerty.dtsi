@@ -1,0 +1,42 @@
+// lib/keymaps/base/qwerty.dtsi
+// Firmware-agnostic base layer definition for QWERTY layout
+// This file serves as the shared source for both ZMK and QMK builds
+
+// Base QWERTY layer macro definition
+// Uses RC(row, col) syntax for position-independent mapping
+#define LAYER_BASE_QWERTY \
+    RC(0,0) &kp Q       &kp W       &kp E       &kp R       &kp T       \
+    RC(1,0) &kp A       &kp S       &kp D       &kp F       &kp G       \
+    RC(2,0) &kp Z       &kp X       &kp C       &kp V       &kp B       \
+    RC(3,0) &none       &kp ESC     &kp TAB     &kp SPACE   &kp RET     \
+    RC(0,5) &kp Y       &kp U       &kp I       &kp O       &kp P       \
+    RC(1,5) &kp H       &kp J       &kp K       &kp L       &kp SEMI    \
+    RC(2,5) &kp N       &kp M       &kp COMMA   &kp DOT     &kp FSLH    \
+    RC(3,5) &none       &kp BSPC    &kp DEL     &kp RSHIFT  &kp RALT
+
+// Symbols layer for numbers and F-keys
+#define LAYER_SYMS \
+    RC(0,0) &kp N1      &kp N2      &kp N3      &kp N4      &kp N5      \
+    RC(1,0) &kp F1      &kp F2      &kp F3      &kp F4      &kp F5      \
+    RC(2,0) &kp LBKT    &kp RBKT    &kp LBRC    &kp RBRC    &kp BSLH    \
+    RC(3,0) &none       &kp ESC     &kp TAB     &kp SPACE   &kp RET     \
+    RC(0,5) &kp N6      &kp N7      &kp N8      &kp N9      &kp N0      \
+    RC(1,5) &kp F6      &kp F7      &kp F8      &kp F9      &kp F10     \
+    RC(2,5) &kp MINUS   &kp EQUAL   &kp SQT     &kp GRAVE   &kp FSLH    \
+    RC(3,5) &none       &kp BSPC    &kp DEL     &kp RSHIFT  &kp RALT
+
+// Navigation layer
+#define LAYER_NAV \
+    RC(0,0) &none       &none       &none       &none       &none       \
+    RC(1,0) &kp LCTRL   &none       &none       &none       &none       \
+    RC(2,0) &none       &none       &none       &none       &none       \
+    RC(3,0) &none       &trans      &trans      &trans      &trans      \
+    RC(0,5) &kp HOME    &kp PG_DN   &kp PG_UP   &kp END     &none       \
+    RC(1,5) &kp LEFT    &kp DOWN    &kp UP      &kp RIGHT   &none       \
+    RC(2,5) &none       &none       &none       &none       &none       \
+    RC(3,5) &none       &kp BSPC    &kp DEL     &kp ENTER   &none
+
+// Layer metadata for tooling
+// LAYER: name=BASE, display=QWERTY, color=blue, thumb=false
+// LAYER: name=SYMS, display=Symbols, color=green, thumb=left
+// LAYER: name=NAV, display=Navigation, color=orange, thumb=right

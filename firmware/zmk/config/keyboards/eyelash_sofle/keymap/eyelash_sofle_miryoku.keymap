@@ -1,0 +1,3 @@
+#include "miryoku/custom_config.h"
+#include "miryoku/eyelash_sofle.h"
+#include "../../../miryoku_zmk/miryoku/miryoku.dtsi"

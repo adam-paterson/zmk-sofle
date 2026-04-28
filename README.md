@@ -1,19 +1,28 @@
 # Adam's Keyboard Firmware Monorepo
 
-[![Build ZMK firmware](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml)
+[![Build All Firmware](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml)
 [![Draw Keymap](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml)
 
-This repo contains ZMK firmware configurations for multiple custom keyboard variants. The local `boards/` tree holds hardware definitions, `config/keyboards/<keyboard>/` contains per-keyboard firmware configurations, and `keymap-drawer/` contains committed diagram output.
+This repo contains firmware configurations for multiple custom keyboard variants, supporting both **ZMK** (Zephyr-based) and **QMK** (Quantum) firmware. The new multi-firmware architecture uses a shared keymap library in `lib/keymaps/` that drives both firmware types.
 
 📚 **Documentation**: See [`docs/keymap-management.md`](docs/keymap-management.md) for the complete keymap organization strategy, layer conventions, and miryoku integration details.
 
 🚀 **New Keyboards**: Use the [`template/`](template/) directory to quickly add new keyboards following the established conventions. See [docs/ADDING_KEYBOARD.md](docs/ADDING_KEYBOARD.md) for the full guide.
+
+🏗️ **Architecture**: See [ARCHITECTURE.md](./ARCHITECTURE.md) for the technical architecture and [refinery/rig/ARCHITECTURE.md](./refinery/rig/ARCHITECTURE.md) for the full design specification.
 
 ## Supported Keyboards
 
 - **eyelash_sofle** - Custom split keyboard based on Eyelash Sofle
 
 To add a new keyboard, see [docs/ADDING_KEYBOARD.md](docs/ADDING_KEYBOARD.md).
+
+## Supported Firmware
+
+| Firmware | Status | Path |
+|----------|--------|------|
+| **ZMK** | ✅ Active | `firmware/zmk/` |
+| **QMK** | 🚧 Placeholder | `firmware/qmk/` *(Phase 3)* |
 
 ## Layout (eyelash_sofle)
 
@@ -60,6 +69,8 @@ This checks for all required tools and dependencies, reporting exactly what's mi
 
 ### Available Tasks
 
+#### Legacy Tasks (Backward Compatible)
+
 | Task | Description |
 |------|-------------|
 | `mise run check` | Validate development environment setup |
@@ -71,8 +82,35 @@ This checks for all required tools and dependencies, reporting exactly what's mi
 | `mise run build:all` | Build both halves (runs left then right) |
 | `mise run flash [left\|right]` | Flash firmware to keyboard (auto-detects bootloader) |
 | `mise run draw` | Regenerate keymap diagram for KEYBOARD |
-| `mise run list-keyboards` | Show available keyboards |
 | `mise run clean` | Remove build artifacts, dependencies, and caches |
+
+#### New Unified Firmware Tasks
+
+| Task | Description |
+|------|-------------|
+| `mise run firmware:setup` | Setup all firmware workspaces (ZMK + QMK) |
+| `mise run firmware:setup:zmk` | Setup ZMK workspace in `firmware/zmk/` |
+| `mise run firmware:setup:qmk` | Setup QMK workspace *(placeholder)* |
+| `mise run firmware:build` | Build all firmware for all targets |
+| `mise run firmware:build:zmk` | Build ZMK from `firmware/zmk/build.yaml` |
+| `mise run firmware:build:qmk` | Build QMK *(placeholder)* |
+| `mise run firmware:build:sofle` | Build Sofle for all firmware |
+| `mise run keymap:convert` | Convert shared keymaps to firmware formats |
+| `mise run keymap:draw` | Regenerate diagrams from `lib/keymaps/` |
+| `mise run firmware:list` | List available firmware and keyboards |
+| `mise run firmware:clean` | Clean all firmware build artifacts |
+
+### Building Firmware
+
+```bash
+# Legacy approach (still works)
+mise run setup
+mise run build:left
+
+# New unified approach
+mise run firmware:setup:zmk
+mise run firmware:build:sofle:zmk
+```
 
 ### Building Specific Keyboards
 
@@ -87,21 +125,17 @@ KEYBOARD=eyelash_sofle mise run build
 KEYBOARD=eyelash_sofle mise run draw
 ```
 
-### Build Standardization
+### Converting Keymaps
 
-Local builds are configured to match CI builds:
+The new architecture uses shared keymap definitions:
 
-- **ZMK Version**: v0.3.0 (pinned in `west.yml` and CI workflow)
-- **Build flags**: Identical between local (`west build`) and CI (`build-user-config.yml`)
-- **Board root**: Points to repo root so Zephyr discovers custom board definitions
-- **Config**: `config/` directory used as `ZMK_CONFIG`
-- **Studio**: Left half always built with ZMK Studio enabled (matches CI artifacts)
+```bash
+# Convert lib/keymaps/ to firmware-specific formats
+mise run keymap:convert
 
-### Environment Variables
-
-| Variable | Purpose | Required |
-|----------|---------|----------|
-| `ZEPHYR_SDK_INSTALL_DIR` | Path to Zephyr SDK installation | Only if not using `arm-none-eabi-gcc` |
+# Regenerate all diagrams
+mise run keymap:draw
+```
 
 ### Flashing Firmware
 
@@ -111,21 +145,44 @@ Local builds are configured to match CI builds:
 4. Flash: `mise run flash left` (or `flash right`)
 5. The keyboard will automatically reboot when complete
 
-## Firmware Builds
+## Repository Structure
 
-GitHub Actions builds firmware artifacts for each keyboard.
-
-For local builds, `mise` tasks call `west build` against `zmk/app` with `config/` as the active `ZMK_CONFIG` and `BOARD_ROOT` pointed at the repo root so Zephyr can discover custom boards under `boards/`.
-
-The build tasks prefer GNU Arm Embedded automatically when `arm-none-eabi-gcc` is installed. If it is not available, they fall back to the Zephyr SDK environment variables.
-
-## Diagrams
-
-### eyelash_sofle
-
-![Adam's Sofle keymap](keymap-drawer/eyelash_sofle.svg)
-
-The committed diagram is generated from `config/keyboards/eyelash_sofle/keymap/eyelash_sofle.keymap`, not edited by hand. See [`docs/keymap-management.md`](docs/keymap-management.md#keymap-drawer-workflow) for details on the keymap-drawer workflow.
+```
+.
+├── firmware/                      # Firmware workspaces (NEW)
+│   ├── zmk/                     # ZMK firmware
+│   │   ├── west.yml
+│   │   ├── build.yaml
+│   │   ├── boards/
+│   │   └── config/
+│   └── qmk/                     # QMK firmware (placeholder)
+│       ├── qmk.json
+│       └── keyboards/
+│
+├── lib/                           # Shared keymap library (NEW)
+│   ├── keymaps/                   # Firmware-agnostic keymaps
+│   │   ├── base/
+│   │   ├── miryoku/
+│   │   └── layers.yaml
+│   └── behaviors/                 # Shared behaviors
+│       ├── combos.yaml
+│       └── macros.yaml
+│
+├── boards/                        # ZMK board definitions (legacy)
+├── config/                        # ZMK config (legacy)
+├── miryoku_zmk/                   # Miryoku submodule
+├── keymap-drawer/                 # Generated keymap diagrams
+│   └── output/                    # New diagram output location
+├── docs/
+│   ├── keymap-management.md       # Keymap organization guide
+│   └── ADDING_KEYBOARD.md         # Guide for adding keyboards
+├── scripts/                       # Build and utility scripts
+│   ├── keymap-convert.py          # Keymap conversion tool
+│   └── setup-check.sh             # Environment validation
+├── mise.toml                      # Task runner configuration
+├── ARCHITECTURE.md                # Architecture documentation
+└── README.md                      # This file
+```
 
 ## CI Workflows
 
@@ -133,46 +190,43 @@ Three GitHub Actions workflows manage the repository:
 
 | Workflow | File | Purpose |
 |----------|------|---------|
-| Build | `.github/workflows/build.yml` | Build ZMK firmware and create releases |
-| Draw | `.github/workflows/draw.yml` | Auto-generate keymap diagrams |
+| Build | `.github/workflows/build.yml` | Build all firmware (ZMK + QMK matrix) and create releases |
+| Draw | `.github/workflows/draw.yml` | Auto-generate keymap diagrams from shared definitions |
 | Validate | `.github/workflows/validate.yml` | Validate keymap syntax and structure |
 
-The validate workflow runs on every PR and push to ensure keymap files are syntactically correct before merging.
+The build workflow now uses a matrix strategy to support multiple firmware types in parallel.
 
-## Repository Structure
+## Multi-Firmware Architecture
 
-```
-.
-├── boards/
-│   ├── arm/<keyboard>/          # Board hardware definitions
-│   └── shields/<shield>/        # Shield definitions
-├── config/
-│   ├── keyboards/
-│   │   └── <keyboard>/          # Per-keyboard configuration
-│   │       ├── <keyboard>.conf
-│   │       ├── <keyboard>.json
-│   │       └── keymap/
-│   │           ├── <keyboard>.keymap
-│   │           └── miryoku/
-│   ├── west.yml                 # West manifest (shared)
-├── keymap-drawer/               # Generated keymap diagrams
-├── docs/
-│   ├── keymap-management.md   # Keymap organization guide
-│   └── ADDING_KEYBOARD.md      # Guide for adding keyboards
-├── mise.toml                    # Task runner configuration
-├── scripts/                     # Utility scripts
-│   └── setup-check.sh           # Development environment validation
-└── README.md                    # This file
-```
+This repository is migrating to a multi-firmware architecture:
+
+**Current Status (Phase 1):**
+- ✅ ZMK fully functional (moved to `firmware/zmk/`)
+- ✅ Shared keymap library created (`lib/keymaps/`)
+- ✅ QMK placeholder structure (`firmware/qmk/`)
+- ✅ Unified mise tasks
+- ✅ Matrix CI builds
+- ✅ Backward compatibility maintained
+
+**Roadmap:**
+- Phase 2: Extract keymaps to shared library
+- Phase 3: Full QMK support
+- Phase 4: Unified CI/CD
+- Phase 5: Remove legacy paths
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for details.
 
 ## Documentation
 
 - **[FLASHING.md](FLASHING.md)** - Complete flashing guide: initial setup, updates, recovery mode, troubleshooting
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - CI/CD workflows, release process, and maintainer guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical architecture documentation
+- **[refinery/rig/ARCHITECTURE.md](refinery/rig/ARCHITECTURE.md)** - Full design specification
 
 ## Credits
 
 - Board design based on Eyelash Sofle by [a741725193](https://github.com/a741725193)
-- Firmware powered by [ZMK](https://github.com/zmkfirmware/zmk)
+- ZMK firmware powered by [ZMK](https://github.com/zmkfirmware/zmk)
+- QMK firmware powered by [QMK](https://github.com/qmk/qmk_firmware)
 - Diagram generation powered by [keymap-drawer](https://github.com/caksoylar/keymap-drawer)
 - Layout system powered by [Miryoku](https://github.com/manna-harbour/miryoku)

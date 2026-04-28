@@ -1,0 +1,52 @@
+# lib/keymaps/layers.yaml
+# Layer metadata for multi-firmware builds and keymap-drawer
+
+layers:
+  - name: BASE
+    display: QWERTY
+    description: Standard alphanumeric layout
+    thumb: false
+    color: "#e8f4f8"  # Light blue
+    position: null
+
+  - name: SYMS
+    display: Symbols
+    description: Numbers, F-keys, brackets, and symbols
+    thumb: left
+    color: "#e8f8e8"  # Light green
+    position: left-thumb
+
+  - name: NAV
+    display: Navigation
+    description: Arrow keys, editing, and clipboard
+    thumb: right
+    color: "#f8f4e8"  # Light orange
+    position: right-thumb
+
+  - name: UTIL
+    display: Utilities
+    description: Bluetooth, RGB, and system controls
+    thumb: both
+    color: "#f8e8e8"  # Light red
+    position: combo
+
+  - name: CODE
+    display: Code
+    description: Programming shortcuts and special keys
+    thumb: right
+    color: "#e8e8f8"  # Light purple
+    position: right-thumb
+
+# Thumb key activation mapping
+thumb_keys:
+  left_inner: SYMS
+  right_inner: NAV
+  left_outer: null
+  right_outer: CODE
+
+# Combo definitions for layer access
+combos:
+  - keys: [SYMS, NAV]
+    result: UTIL
+    timeout: 50
+    description: Hold both inner thumbs for utilities
