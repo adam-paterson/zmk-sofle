@@ -1,6 +1,11 @@
 name: Draw Keymap
 on:
   workflow_dispatch:
+    inputs:
+      keyboard:
+        description: 'Keyboard to draw (default: eyelash_sofle)'
+        required: false
+        default: 'eyelash_sofle'
   push:
     paths:
       - "config/**"
@@ -9,10 +14,36 @@ on:
 
 jobs:
   draw:
-    uses: caksoylar/keymap-drawer/.github/workflows/draw-zmk.yml@v0.23.0
-    permissions:
-      contents: write
-    with:
-      commit_message: "[Draw] Sync keymap diagram"
-      destination: "commit"
-      fail_on_error: ${{ fromJSON(true) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install keymap-drawer
+        run: |
+          pip install keymap-drawer
+
+      - name: Draw keymap
+        env:
+          KEYBOARD: ${{ github.event.inputs.keyboard || 'eyelash_sofle' }}
+        run: |
+          mkdir -p keymap-drawer
+          keymap -c keymap_drawer.config.yaml parse -z "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
+          keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add keymap-drawer/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "[Draw] Sync keymap diagram for ${KEYBOARD:-eyelash_sofle}"
+            git push
+          fi

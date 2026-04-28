@@ -1,15 +1,19 @@
-# Adam's Sofle
+# Adam's Keyboard Firmware Monorepo
 
 [![Build ZMK firmware](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml)
 [![Draw Keymap](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml)
 
-This repo is a cleaned-up ZMK user-config for a custom Sofle board. The local `boards/` tree is the source of truth for the board definition, `config/` holds the active firmware configuration, and `keymap-drawer/` contains committed diagram output derived from the active keymap.
+This repo contains ZMK firmware configurations for multiple custom keyboard variants. The local `boards/` tree holds hardware definitions, `config/keyboards/<keyboard>/` contains per-keyboard firmware configurations, and `keymap-drawer/` contains committed diagram output.
 
 📚 **Documentation**: See [`docs/keymap-management.md`](docs/keymap-management.md) for the complete keymap organization strategy, layer conventions, and miryoku integration details.
 
-🚀 **New Keyboards**: Use the [`template/`](template/) directory to quickly add new keyboards following the established conventions.
+🚀 **New Keyboards**: Use the [`template/`](template/) directory to quickly add new keyboards following the established conventions. See [docs/ADDING_KEYBOARD.md](docs/ADDING_KEYBOARD.md) for the full guide.
 
-## Layout
+## Supported Keyboards
+
+- **eyelash_sofle** - Custom split keyboard based on Eyelash Sofle
+
+## Layout (eyelash_sofle)
 
 - `BASE`: everyday QWERTY typing
 - `SYMS`: F-keys, numbers, brackets, and symbols on the left inner thumb
@@ -31,7 +35,7 @@ The only combo left in the active keymap is `Q + S + Z` held for two seconds to 
 
 ## Local Tooling
 
-This repo uses [`mise`](https://mise.jdx.dev/) for local tooling where practical.
+This repo uses [`mise`](https://mise.jdx.dev/) for local tooling.
 
 ### Quick Setup Validation
 
@@ -44,7 +48,6 @@ mise run check
 This checks for all required tools and dependencies, reporting exactly what's missing with specific install commands.
 
 ### Prerequisites
-
 
 1. Install `mise`
 2. Run `mise install` to get Python, uv, cmake, ninja, and protobuf
@@ -60,12 +63,27 @@ This checks for all required tools and dependencies, reporting exactly what's mi
 | `mise run check` | Validate development environment setup |
 | `mise run setup` | Initialize west workspace and fetch ZMK dependencies |
 | `mise run update` | Refresh west dependencies without changing tracked sources |
+| `mise run build` | Build firmware for KEYBOARD (default: eyelash_sofle) |
 | `mise run build:left` | Build left half firmware **with ZMK Studio enabled** |
 | `mise run build:right` | Build right half firmware |
 | `mise run build:all` | Build both halves (runs left then right) |
 | `mise run flash [left\|right]` | Flash firmware to keyboard (auto-detects bootloader) |
-| `mise run draw` | Regenerate keymap drawer YAML and SVG |
+| `mise run draw` | Regenerate keymap diagram for KEYBOARD |
+| `mise run list-keyboards` | Show available keyboards |
 | `mise run clean` | Remove build artifacts, dependencies, and caches |
+
+### Building Specific Keyboards
+
+```bash
+# Build default keyboard (eyelash_sofle)
+mise run build
+
+# Build a specific keyboard
+KEYBOARD=eyelash_sofle mise run build
+
+# Draw keymap for specific keyboard
+KEYBOARD=eyelash_sofle mise run draw
+```
 
 ### Build Standardization
 
@@ -93,21 +111,19 @@ Local builds are configured to match CI builds:
 
 ## Firmware Builds
 
-GitHub Actions builds three artifacts:
+GitHub Actions builds firmware artifacts for each keyboard.
 
-- `adams_sofle_studio_left.uf2`
-- `adams_sofle_right.uf2`
-- `settings_reset-nice_nano_v2-zmk.uf2`
-
-For local builds, `mise` tasks call `west build` against `zmk/app` with `config/` as the active `ZMK_CONFIG` and `BOARD_ROOT` pointed at the repo root so Zephyr can discover the custom board under `boards/`.
+For local builds, `mise` tasks call `west build` against `zmk/app` with `config/` as the active `ZMK_CONFIG` and `BOARD_ROOT` pointed at the repo root so Zephyr can discover custom boards under `boards/`.
 
 The build tasks prefer GNU Arm Embedded automatically when `arm-none-eabi-gcc` is installed. If it is not available, they fall back to the Zephyr SDK environment variables.
 
-## Diagram
+## Diagrams
+
+### eyelash_sofle
 
 ![Adam's Sofle keymap](keymap-drawer/eyelash_sofle.svg)
 
-The committed diagram is generated from `config/eyelash_sofle.keymap`, not edited by hand. See [`docs/keymap-management.md`](docs/keymap-management.md#keymap-drawer-workflow) for details on the keymap-drawer workflow.
+The committed diagram is generated from `config/keyboards/eyelash_sofle/keymap/eyelash_sofle.keymap`, not edited by hand. See [`docs/keymap-management.md`](docs/keymap-management.md#keymap-drawer-workflow) for details on the keymap-drawer workflow.
 
 ## CI Workflows
 
@@ -121,6 +137,32 @@ Three GitHub Actions workflows manage the repository:
 
 The validate workflow runs on every PR and push to ensure keymap files are syntactically correct before merging.
 
+## Repository Structure
+
+```
+.
+├── boards/
+│   ├── arm/<keyboard>/          # Board hardware definitions
+│   └── shields/<shield>/        # Shield definitions
+├── config/
+│   ├── keyboards/
+│   │   └── <keyboard>/          # Per-keyboard configuration
+│   │       ├── <keyboard>.conf
+│   │       ├── <keyboard>.json
+│   │       └── keymap/
+│   │           ├── <keyboard>.keymap
+│   │           └── miryoku/
+│   ├── west.yml                 # West manifest (shared)
+├── keymap-drawer/               # Generated keymap diagrams
+├── docs/
+│   ├── keymap-management.md   # Keymap organization guide
+│   └── ADDING_KEYBOARD.md      # Guide for adding keyboards
+├── mise.toml                    # Task runner configuration
+├── scripts/                     # Utility scripts
+│   └── setup-check.sh           # Development environment validation
+└── README.md                    # This file
+```
+
 ## Documentation
 
 - **[FLASHING.md](FLASHING.md)** - Complete flashing guide: initial setup, updates, recovery mode, troubleshooting
@@ -131,3 +173,4 @@ The validate workflow runs on every PR and push to ensure keymap files are synta
 - Board design based on Eyelash Sofle by [a741725193](https://github.com/a741725193)
 - Firmware powered by [ZMK](https://github.com/zmkfirmware/zmk)
 - Diagram generation powered by [keymap-drawer](https://github.com/caksoylar/keymap-drawer)
+- Layout system powered by [Miryoku](https://github.com/manna-harbour/miryoku)

@@ -8,6 +8,10 @@ cmake = "latest"
 ninja = "latest"
 protobuf = "latest"
 
+[env]
+KEYBOARD = { value = "eyelash_sofle", description = "Keyboard variant to build (e.g., eyelash_sofle, sofle_choc)" }
+KEYMAP = { value = "eyelash_sofle", description = "Keymap name to use (defaults to keyboard name)" }
+
 [tasks.setup]
 description = "Initialize the local west workspace and fetch ZMK dependencies"
 run = '''
@@ -39,23 +43,52 @@ uv run west zephyr-export
 '''
 
 [tasks.draw]
-description = "Regenerate the committed keymap drawer YAML and SVG"
+description = "Regenerate the committed keymap drawer YAML and SVG for KEYBOARD"
 sources = [
-  "config/eyelash_sofle.keymap",
+  "config/keyboards/{{env.KEYBOARD}}/keymap/{{env.KEYBOARD}}.keymap",
   "keymap_drawer.config.yaml",
-  "config/eyelash_sofle.json",
+  "config/keyboards/{{env.KEYBOARD}}/{{env.KEYBOARD}}.json",
 ]
 outputs = [
-  "keymap-drawer/eyelash_sofle.yaml",
-  "keymap-drawer/eyelash_sofle.svg",
+  "keymap-drawer/{{env.KEYBOARD}}.yaml",
+  "keymap-drawer/{{env.KEYBOARD}}.svg",
 ]
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
 
+KEYBOARD="${KEYBOARD:-eyelash_sofle}"
+
+echo "Drawing keymap for keyboard: $KEYBOARD"
+
 mkdir -p keymap-drawer
-uv run keymap -c keymap_drawer.config.yaml parse -z config/eyelash_sofle.keymap > keymap-drawer/eyelash_sofle.yaml
-uv run keymap -c keymap_drawer.config.yaml draw keymap-drawer/eyelash_sofle.yaml -o keymap-drawer/eyelash_sofle.svg
+uv run keymap -c keymap_drawer.config.yaml parse -z "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
+uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
+echo "Generated: keymap-drawer/${KEYBOARD}.yaml and keymap-drawer/${KEYBOARD}.svg"
+'''
+
+[tasks.build]
+description = "Build firmware for KEYBOARD (default: eyelash_sofle)"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEYBOARD="${KEYBOARD:-eyelash_sofle}"
+KEYMAP="${KEYMAP:-$KEYBOARD}"
+
+echo "Building firmware for keyboard: $KEYBOARD, keymap: $KEYMAP"
+
+# Validate keyboard exists
+if [ ! -d "config/keyboards/${KEYBOARD}" ]; then
+  echo "Error: Keyboard '${KEYBOARD}' not found in config/keyboards/"
+  echo "Available keyboards:"
+  ls -1 config/keyboards/
+  exit 1
+fi
+
+# Build with west
+uv run west build -s zmk/app -b "${KEYBOARD}_left" -- -DZMK_CONFIG="${PWD}/config" -DKEYMAP="${KEYMAP}"
+uv run west build -s zmk/app -b "${KEYBOARD}_right" -- -DZMK_CONFIG="${PWD}/config" -DKEYMAP="${KEYMAP}"
 '''
 
 [tasks."build:left"]
@@ -202,3 +235,11 @@ rm -rf build .venv .west .zmk .keymap-drawer .zmk-python zmk modules zephyr eyel
 [tasks.check]
 description = "Validate local development environment setup"
 run = "./scripts/setup-check.sh"
+
+[tasks.list-keyboards]
+description = "List available keyboard variants"
+run = '''
+#!/usr/bin/env bash
+echo "Available keyboards in config/keyboards/:"
+ls -1 config/keyboards/ 2>/dev/null || echo "  (none found)"
+'''

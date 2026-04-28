@@ -2,7 +2,7 @@
 // Switch alpha layout by changing defines in miryoku/custom_config.h
 #include "miryoku/custom_config.h"
 #include "miryoku/eyelash_sofle.h"
-#include "../miryoku_zmk/miryoku/miryoku.dtsi"
+#include "../../../miryoku_zmk/miryoku/miryoku.dtsi"
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 1200
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25
