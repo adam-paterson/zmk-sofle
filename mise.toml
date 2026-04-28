@@ -86,8 +86,20 @@ if [ ! -d "config/keyboards/${KEYBOARD}" ]; then
   exit 1
 fi
 
+# Check for arm-none-eabi-gcc (preferred) or Zephyr SDK
+if command -v arm-none-eabi-gcc &> /dev/null; then
+  echo "Using GNU Arm Embedded toolchain"
+  export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
+elif [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  echo "Using Zephyr SDK"
+else
+  echo "Warning: No ARM toolchain found. Install arm-none-eabi-gcc or Zephyr SDK."
+  echo "  macOS: brew install arm-none-eabi-gcc"
+  exit 1
+fi
+
 # Build with west
-uv run west build -s zmk/app -b "${KEYBOARD}_left" -- -DZMK_CONFIG="${PWD}/config" -DKEYMAP="${KEYMAP}"
+uv run west build -s zmk/app -b "${KEYBOARD}_left" -- -DZMK_CONFIG="${PWD}/config" -DKEYMAP="${KEYMAP}" -DCONFIG_ZMK_STUDIO=y
 uv run west build -s zmk/app -b "${KEYBOARD}_right" -- -DZMK_CONFIG="${PWD}/config" -DKEYMAP="${KEYMAP}"
 '''
 
@@ -96,6 +108,8 @@ description = "Build firmware for the left half with ZMK Studio support"
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
+
+KEYBOARD="${KEYBOARD:-eyelash_sofle}"
 
 # Ensure west workspace is initialized
 if [ ! -d .west ]; then
@@ -116,7 +130,7 @@ else
 fi
 
 # Build with ZMK Studio enabled (matches CI artifact naming)
-uv run west build -s zmk/app -d build/left -b eyelash_sofle_left -- \
+uv run west build -s zmk/app -d build/left -b "${KEYBOARD}_left" -- \
   -DZMK_CONFIG="${PWD}/config" \
   -DBOARD_ROOT="${PWD}" \
   -DCONFIG_ZMK_STUDIO=y
@@ -129,6 +143,8 @@ description = "Build firmware for the right half"
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
+
+KEYBOARD="${KEYBOARD:-eyelash_sofle}"
 
 # Ensure west workspace is initialized
 if [ ! -d .west ]; then
@@ -149,7 +165,7 @@ else
 fi
 
 # Build right half (no studio needed on right)
-uv run west build -s zmk/app -d build/right -b eyelash_sofle_right -- \
+uv run west build -s zmk/app -d build/right -b "${KEYBOARD}_right" -- \
   -DZMK_CONFIG="${PWD}/config" \
   -DBOARD_ROOT="${PWD}"
 
