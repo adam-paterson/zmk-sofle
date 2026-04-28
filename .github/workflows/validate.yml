@@ -30,29 +30,36 @@ jobs:
           set -e
           echo "Validating keymap files..."
 
-          # Find all .keymap files
-          for keymap in config/*.keymap; do
-            if [ -f "$keymap" ]; then
-              echo "Checking: $keymap"
+          # Find all .keymap files recursively
+          find config -name "*.keymap" -type f | while read -r keymap; do
+            echo "Checking: $keymap"
 
-              # Get the base name for the corresponding JSON file
-              basename=$(basename "$keymap" .keymap)
-              json_file="config/${basename}.json"
+            # Get the base name and directory for the corresponding JSON file
+            basename=$(basename "$keymap" .keymap)
+            keymap_dir=$(dirname "$keymap")
+            json_file="${keymap_dir}/${basename}.json"
 
-              if [ -f "$json_file" ]; then
-                echo "  - Found layout: $json_file"
+            # Also check parent directory (keyboard level) for JSON
+            parent_dir=$(dirname "$keymap_dir")
+            json_file_alt="${parent_dir}/${basename}.json"
 
-                # Try to parse the keymap
-                if keymap -c keymap_drawer.config.yaml parse -z "$keymap" > /dev/null 2>&1; then
-                  echo "  ✓ Syntax valid"
-                else
-                  echo "  ✗ Syntax error in $keymap"
-                  keymap -c keymap_drawer.config.yaml parse -z "$keymap" || true
-                  exit 1
-                fi
-              else
-                echo "  ⚠ No layout JSON found for $keymap"
-              fi
+            if [ -f "$json_file" ]; then
+              echo "  - Found layout: $json_file"
+            elif [ -f "$json_file_alt" ]; then
+              echo "  - Found layout: $json_file_alt"
+              json_file="$json_file_alt"
+            else
+              echo "  ⚠ No layout JSON found for $keymap"
+              continue
+            fi
+
+            # Try to parse the keymap
+            if keymap -c keymap_drawer.config.yaml parse -z "$keymap" > /dev/null 2>&1; then
+              echo "  ✓ Syntax valid"
+            else
+              echo "  ✗ Syntax error in $keymap"
+              keymap -c keymap_drawer.config.yaml parse -z "$keymap" || true
+              exit 1
             fi
           done
 
@@ -64,21 +71,21 @@ jobs:
           set -e
           echo "Validating JSON layout files..."
 
-          for json in config/*.json; do
-            if [ -f "$json" ]; then
-              echo "Checking: $json"
+          # Find all JSON files recursively
+          find config -name "*.json" -type f | while read -r json; do
+            echo "Checking: $json"
 
-              # Validate JSON syntax
-              if python3 -c "import json; json.load(open('$json'))" 2>/dev/null; then
-                echo "  ✓ JSON syntax valid"
-              else
-                echo "  ✗ JSON syntax error in $json"
-                python3 -c "import json; json.load(open('$json'))"
-                exit 1
-              fi
+            # Validate JSON syntax
+            if python3 -c "import json; json.load(open('$json'))" 2>/dev/null; then
+              echo "  ✓ JSON syntax valid"
+            else
+              echo "  ✗ JSON syntax error in $json"
+              python3 -c "import json; json.load(open('$json'))"
+              exit 1
+            fi
 
-              # Check required fields
-              if python3 << EOF
+            # Check required fields
+            if python3 << EOF
 import json
 import sys
 
@@ -104,12 +111,11 @@ else:
 
 print("  ✓ Structure valid")
 EOF
-              then
-                echo "  ✓ Layout structure valid"
-              else
-                echo "  ✗ Layout structure error"
-                exit 1
-              fi
+            then
+              echo "  ✓ Layout structure valid"
+            else
+              echo "  ✗ Layout structure error"
+              exit 1
             fi
           done
 
@@ -120,27 +126,28 @@ EOF
         run: |
           echo "Checking for orphaned keymap/layout files..."
 
-          # Find keymaps without JSON
-          for keymap in config/*.keymap; do
-            if [ -f "$keymap" ]; then
-              basename=$(basename "$keymap" .keymap)
-              json_file="config/${basename}.json"
+          # Find keymaps without corresponding JSON
+          find config -name "*.keymap" -type f | while read -r keymap; do
+            basename=$(basename "$keymap" .keymap)
+            keymap_dir=$(dirname "$keymap")
+            parent_dir=$(dirname "$keymap_dir")
+            json_file="${keymap_dir}/${basename}.json"
+            json_file_alt="${parent_dir}/${basename}.json"
 
-              if [ ! -f "$json_file" ]; then
-                echo "  ⚠ Keymap without JSON: $keymap"
-              fi
+            if [ ! -f "$json_file" ] && [ ! -f "$json_file_alt" ]; then
+              echo "  ⚠ Keymap without JSON: $keymap"
             fi
           done
 
-          # Find JSON without keymaps
-          for json in config/*.json; do
-            if [ -f "$json" ]; then
-              basename=$(basename "$json" .json)
-              keymap_file="config/${basename}.keymap"
+          # Find JSON without corresponding keymaps
+          find config -name "*.json" -type f | while read -r json; do
+            basename=$(basename "$json" .json)
+            json_dir=$(dirname "$json")
+            keymap_file="${json_dir}/keymap/${basename}.keymap"
+            keymap_file_alt="${json_dir}/${basename}.keymap"
 
-              if [ ! -f "$keymap_file" ]; then
-                echo "  ⚠ JSON without keymap: $json"
-              fi
+            if [ ! -f "$keymap_file" ] && [ ! -f "$keymap_file_alt" ]; then
+              echo "  ⚠ JSON without keymap: $json"
             fi
           done
 
@@ -154,9 +161,9 @@ EOF
           echo "Keymap Validation Summary"
           echo "==================================="
           echo "Validated keymap files:"
-          ls -1 config/*.keymap 2>/dev/null || echo "  None found"
+          find config -name "*.keymap" -type f 2>/dev/null || echo "  None found"
           echo ""
           echo "Validated layout files:"
-          ls -1 config/*.json 2>/dev/null || echo "  None found"
+          find config -name "*.json" -type f 2>/dev/null || echo "  None found"
           echo ""
           echo "==================================="
