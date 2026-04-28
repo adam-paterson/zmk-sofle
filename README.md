@@ -1,5 +1,8 @@
 # Adam's Sofle
 
+[![Build ZMK firmware](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/build.yml)
+[![Draw Keymap](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml/badge.svg)](https://github.com/adam-paterson/zmk-sofle/actions/workflows/draw.yml)
+
 This repo is a cleaned-up ZMK user-config for a custom Sofle board. The local `boards/` tree is the source of truth for the board definition, `config/` holds the active firmware configuration, and `keymap-drawer/` contains committed diagram output derived from the active keymap.
 
 ## Layout
@@ -89,6 +92,11 @@ The build tasks prefer GNU Arm Embedded automatically when `arm-none-eabi-gcc` i
 ![Adam's Sofle keymap](keymap-drawer/eyelash_sofle.svg)
 
 The committed diagram is generated from `config/eyelash_sofle.keymap`, not edited by hand.
+
+## Documentation
+
+- **[FLASHING.md](FLASHING.md)** - Complete flashing guide: initial setup, updates, recovery mode, troubleshooting
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - CI/CD workflows, release process, and maintainer guide
 
 ## Credits
 
