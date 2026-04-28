@@ -26,22 +26,51 @@ The only combo left in the active keymap is `Q + S + Z` held for two seconds to 
 
 This repo uses [`mise`](https://mise.jdx.dev/) for local tooling where practical.
 
-1. Install `mise`.
-2. Run `mise install`.
-3. Install either the Zephyr SDK or GNU Arm Embedded on macOS.
-   Example: `brew install arm-none-eabi-gcc`
-4. Run `mise run setup`.
+### Prerequisites
 
-Available tasks:
+1. Install `mise`
+2. Run `mise install` to get Python, uv, cmake, ninja, and protobuf
+3. Install an ARM toolchain (choose one):
+   - **GNU Arm Embedded** (preferred on macOS): `brew install arm-none-eabi-gcc`
+   - **Zephyr SDK**: Download from [Zephyr SDK releases](https://github.com/zephyrproject-rtos/sdk-ng/releases)
+4. Run `mise run setup` to initialize the west workspace
 
-- `mise run setup`: initialize `west` workspace and fetch dependencies
-- `mise run update`: refresh `west` dependencies
-- `mise run build:left`: build the left half
-- `mise run build:left --studio`: build the left half with ZMK Studio enabled
-- `mise run build:right`: build the right half
-- `mise run build:all`: build both halves
-- `mise run draw`: regenerate `keymap-drawer/eyelash_sofle.yaml` and `.svg`
-- `mise run clean`: remove local build and fetched dependency state
+### Available Tasks
+
+| Task | Description |
+|------|-------------|
+| `mise run setup` | Initialize west workspace and fetch ZMK dependencies |
+| `mise run update` | Refresh west dependencies without changing tracked sources |
+| `mise run build:left` | Build left half firmware **with ZMK Studio enabled** |
+| `mise run build:right` | Build right half firmware |
+| `mise run build:all` | Build both halves (runs left then right) |
+| `mise run flash [left\|right]` | Flash firmware to keyboard (auto-detects bootloader) |
+| `mise run draw` | Regenerate keymap drawer YAML and SVG |
+| `mise run clean` | Remove build artifacts, dependencies, and caches |
+
+### Build Standardization
+
+Local builds are configured to match CI builds:
+
+- **ZMK Version**: v0.3.0 (pinned in `west.yml` and CI workflow)
+- **Build flags**: Identical between local (`west build`) and CI (`build-user-config.yml`)
+- **Board root**: Points to repo root so Zephyr discovers custom board definitions
+- **Config**: `config/` directory used as `ZMK_CONFIG`
+- **Studio**: Left half always built with ZMK Studio enabled (matches CI artifacts)
+
+### Environment Variables
+
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `ZEPHYR_SDK_INSTALL_DIR` | Path to Zephyr SDK installation | Only if not using `arm-none-eabi-gcc` |
+
+### Flashing Firmware
+
+1. Build the firmware: `mise run build:left` (or `build:right`)
+2. Put the keyboard half in bootloader mode: **double-press the reset button quickly**
+3. A USB drive named `NICE_NANO` or `RPI-RP2` will appear
+4. Flash: `mise run flash left` (or `flash right`)
+5. The keyboard will automatically reboot when complete
 
 ## Firmware Builds
 

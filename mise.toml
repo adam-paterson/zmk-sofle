@@ -58,6 +58,138 @@ uv run keymap -c keymap_drawer.config.yaml parse -z config/eyelash_sofle.keymap 
 uv run keymap -c keymap_drawer.config.yaml draw keymap-drawer/eyelash_sofle.yaml -o keymap-drawer/eyelash_sofle.svg
 '''
 
+[tasks."build:left"]
+description = "Build firmware for the left half with ZMK Studio support"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Ensure west workspace is initialized
+if [ ! -d .west ]; then
+  echo "Initializing west workspace..."
+  uv run west init -l config
+fi
+
+# Check for arm-none-eabi-gcc (preferred) or Zephyr SDK
+if command -v arm-none-eabi-gcc &> /dev/null; then
+  echo "Using GNU Arm Embedded toolchain"
+  export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
+elif [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  echo "Using Zephyr SDK"
+else
+  echo "Warning: No ARM toolchain found. Install arm-none-eabi-gcc or Zephyr SDK."
+  echo "  macOS: brew install arm-none-eabi-gcc"
+  exit 1
+fi
+
+# Build with ZMK Studio enabled (matches CI artifact naming)
+uv run west build -s zmk/app -d build/left -b eyelash_sofle_left -- \
+  -DZMK_CONFIG="${PWD}/config" \
+  -DBOARD_ROOT="${PWD}" \
+  -DCONFIG_ZMK_STUDIO=y
+
+echo "Build complete: build/left/zephyr/zmk.uf2"
+'''
+
+[tasks."build:right"]
+description = "Build firmware for the right half"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Ensure west workspace is initialized
+if [ ! -d .west ]; then
+  echo "Initializing west workspace..."
+  uv run west init -l config
+fi
+
+# Check for arm-none-eabi-gcc (preferred) or Zephyr SDK
+if command -v arm-none-eabi-gcc &> /dev/null; then
+  echo "Using GNU Arm Embedded toolchain"
+  export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
+elif [ -n "${ZEPHYR_SDK_INSTALL_DIR:-}" ]; then
+  echo "Using Zephyr SDK"
+else
+  echo "Warning: No ARM toolchain found. Install arm-none-eabi-gcc or Zephyr SDK."
+  echo "  macOS: brew install arm-none-eabi-gcc"
+  exit 1
+fi
+
+# Build right half (no studio needed on right)
+uv run west build -s zmk/app -d build/right -b eyelash_sofle_right -- \
+  -DZMK_CONFIG="${PWD}/config" \
+  -DBOARD_ROOT="${PWD}"
+
+echo "Build complete: build/right/zephyr/zmk.uf2"
+'''
+
+[tasks."build:all"]
+description = "Build firmware for both halves"
+depends = ["build:left", "build:right"]
+
+[tasks.flash]
+description = "Flash firmware to the keyboard (detects bootloader automatically)"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Detect OS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  MOUNT_BASE="/Volumes"
+  COPY_CMD="cp"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  MOUNT_BASE="/media/$USER"
+  COPY_CMD="cp"
+else
+  echo "Unsupported OS: $OSTYPE"
+  exit 1
+fi
+
+# Determine which firmware to flash
+SIDE="${1:-left}"
+if [ "$SIDE" = "left" ]; then
+  FIRMWARE="build/left/zephyr/zmk.uf2"
+  echo "Flashing LEFT half (with ZMK Studio)..."
+elif [ "$SIDE" = "right" ]; then
+  FIRMWARE="build/right/zephyr/zmk.uf2"
+  echo "Flashing RIGHT half..."
+else
+  echo "Usage: mise run flash [left|right]"
+  echo "  Default: left"
+  exit 1
+fi
+
+if [ ! -f "$FIRMWARE" ]; then
+  echo "Error: Firmware not found at $FIRMWARE"
+  echo "Build first with: mise run build:$SIDE"
+  exit 1
+fi
+
+echo "Waiting for bootloader drive (press reset twice on the $SIDE half)..."
+echo "Looking for NICE_NANO or similar RPI-RP2 drive..."
+
+# Wait for drive to appear
+for i in {1..30}; do
+  DRIVE=$(find "$MOUNT_BASE" -maxdepth 1 -type d \( -iname "*NICE_NANO*" -o -iname "*RPI-RP2*" -o -iname "*NICENANO*" \) 2>/dev/null | head -1 || true)
+  if [ -n "$DRIVE" ]; then
+    echo "Found bootloader drive: $DRIVE"
+    echo "Copying firmware..."
+    $COPY_CMD "$FIRMWARE" "$DRIVE/"
+    echo "Done! The keyboard will reboot automatically."
+    exit 0
+  fi
+  sleep 1
+  echo -n "."
+done
+
+echo ""
+echo "Error: No bootloader drive detected after 30 seconds."
+echo "Make sure the keyboard half is in bootloader mode:"
+echo "  1. Double-press the reset button quickly"
+echo "  2. A USB drive named NICE_NANO or RPI-RP2 should appear"
+exit 1
+'''
+
 [tasks.clean]
 description = "Remove local build artifacts, fetched dependencies, and caches"
 run = '''
