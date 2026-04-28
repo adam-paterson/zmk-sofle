@@ -33,7 +33,18 @@ The only combo left in the active keymap is `Q + S + Z` held for two seconds to 
 
 This repo uses [`mise`](https://mise.jdx.dev/) for local tooling where practical.
 
+### Quick Setup Validation
+
+Validate your development environment with one command:
+
+```bash
+mise run check
+```
+
+This checks for all required tools and dependencies, reporting exactly what's missing with specific install commands.
+
 ### Prerequisites
+
 
 1. Install `mise`
 2. Run `mise install` to get Python, uv, cmake, ninja, and protobuf
@@ -46,6 +57,7 @@ This repo uses [`mise`](https://mise.jdx.dev/) for local tooling where practical
 
 | Task | Description |
 |------|-------------|
+| `mise run check` | Validate development environment setup |
 | `mise run setup` | Initialize west workspace and fetch ZMK dependencies |
 | `mise run update` | Refresh west dependencies without changing tracked sources |
 | `mise run build:left` | Build left half firmware **with ZMK Studio enabled** |

@@ -198,3 +198,7 @@ set -euo pipefail
 
 rm -rf build .venv .west .zmk .keymap-drawer .zmk-python zmk modules zephyr eyelash_sofle
 '''
+
+[tasks.check]
+description = "Validate local development environment setup"
+run = "./scripts/setup-check.sh"
