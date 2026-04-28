@@ -11,3 +11,10 @@ tools/
 .venv/
 eyelash_sofle/
 .DS_Store
+
+# Gas Town runtime files
+.beads/
+.opencode/
+.runtime/
+CLAUDE.md
+AGENTS.md
