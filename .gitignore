@@ -18,3 +18,5 @@ eyelash_sofle/
 .runtime/
 CLAUDE.md
 AGENTS.md
+*.log
+.polecat/
