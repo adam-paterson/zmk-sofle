@@ -1,6 +1,9 @@
-// Local Miryoku options for the eyelash_sofle trial build.
+// Shared Miryoku configuration for eyelash_sofle
+// This file contains layout-agnostic Miryoku settings.
+// Layout selection (Colemak-DH, QWERTY, etc.) is done in each keymap file.
 //
-// Miryoku defaults to Colemak-DH. Now switching from QWERTY to Colemak-DH.
+// This allows multiple keymaps to share the same base configuration while
+// using different alphas layouts.
 
-#define MIRYOKU_ALPHAS_COLEMAKDH
+// Tap layer uses same alphas as base (defined per-keymap)
 #define MIRYOKU_TAP_COLEMAKDH

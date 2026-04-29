@@ -1,15 +1,15 @@
 build/
-zmk/
-modules/
-zephyr/
-tools/
+/zmk/
+/modules/
+/zephyr/
+/tools/
 .west/
 .zmk/
 .direnv
 .keymap-drawer
 .zmk-python/
 .venv/
-eyelash_sofle/
+/eyelash_sofle/
 .DS_Store
 
 # Gas Town runtime files

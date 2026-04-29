@@ -1,13 +1,27 @@
 include:
+  # Colemak-DH Layout (Primary)
   - board: eyelash_sofle_left
     board_root: .
     snippet: studio-rpc-usb-uart
-    artifact-name: adams_sofle_studio_left
-    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle
+    artifact-name: adams_sofle_colemakdh_studio_left
+    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle_colemakdh
   - board: eyelash_sofle_right
     board_root: .
-    artifact-name: adams_sofle_right
-    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle
+    artifact-name: adams_sofle_colemakdh_right
+    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle_colemakdh
+
+  # QWERTY Layout (Fallback)
+  - board: eyelash_sofle_left
+    board_root: .
+    snippet: studio-rpc-usb-uart
+    artifact-name: adams_sofle_qwerty_studio_left
+    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle_qwerty
+  - board: eyelash_sofle_right
+    board_root: .
+    artifact-name: adams_sofle_qwerty_right
+    keymap: keyboards/eyelash_sofle/keymap/eyelash_sofle_qwerty
+
+  # Settings reset
   - board: settings_reset
     shield: settings_reset
     artifact-name: settings_reset-nice_nano_v2
