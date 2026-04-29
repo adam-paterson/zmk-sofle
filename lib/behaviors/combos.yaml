@@ -6,30 +6,30 @@ combo_definitions:
   # Deep sleep combo (Q + S + Z held for 2 seconds)
   - name: deep_sleep
     keys:
-      - &kp Q
-      - &kp S
-      - &kp Z
+      - "&kp Q"
+      - "&kp S"
+      - "&kp Z"
     timeout_ms: 2000
-    bindings: &soft_off
+    bindings: "&soft_off"
     layers: [BASE]
     description: Enter deep sleep mode
 
   # Quick escape combo
   - name: quick_esc
     keys:
-      - &kp Q
-      - &kp W
+      - "&kp Q"
+      - "&kp W"
     timeout_ms: 50
-    bindings: &kp ESC
+    bindings: "&kp ESC"
     layers: [BASE, SYMS]
     description: Quick escape from home row
 
   # Parenthesis combo
   - name: parens
     keys:
-      - &kp J
-      - &kp K
+      - "&kp J"
+      - "&kp K"
     timeout_ms: 50
-    bindings: &kp LPAR
+    bindings: "&kp LPAR"
     layers: [BASE]
     description: Left parenthesis
