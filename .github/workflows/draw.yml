@@ -3,12 +3,17 @@ on:
   workflow_dispatch:
     inputs:
       keyboard:
-        description: 'Keyboard to draw (default: eyelash_sofle)'
+        description: 'Keyboard to draw (sofle, q1, or all)'
         required: false
-        default: 'eyelash_sofle'
+        default: 'all'
+      layout:
+        description: 'Layout to draw (colemakdh, qwerty, or all)'
+        required: false
+        default: 'all'
   push:
     paths:
-      - "firmware/zmk/config/**"
+      - "firmware/zmk/config/keyboards/**/keymap/*.keymap"
+      - "firmware/qmk/keyboards/**/keymaps/**/keymap.c"
       - "lib/keymaps/**"
       - .github/workflows/draw.yml
       - keymap_drawer.config.yaml
@@ -20,48 +25,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup mise
+        uses: jdx/mise-action@v2
         with:
-          python-version: '3.13'
+          install: true
 
-      - name: Install keymap-drawer
+      - name: Draw Sofle Keymaps
+        if: github.event.inputs.keyboard == 'sofle' || github.event.inputs.keyboard == 'all' || github.event.inputs.keyboard == ''
         run: |
-          pip install keymap-drawer
-
-      - name: Draw keymap from legacy config
-        env:
-          KEYBOARD: ${{ github.event.inputs.keyboard || 'eyelash_sofle' }}
-        run: |
-          mkdir -p keymap-drawer
-          # Support both old and new paths
-          if [ -f "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" ]; then
-            keymap -c keymap_drawer.config.yaml parse -z "config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
-            keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
-          elif [ -f "firmware/zmk/config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" ]; then
-            keymap -c keymap_drawer.config.yaml parse -z "firmware/zmk/config/keyboards/${KEYBOARD}/keymap/${KEYBOARD}.keymap" > "keymap-drawer/${KEYBOARD}.yaml"
-            keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml" -o "keymap-drawer/${KEYBOARD}.svg"
-          else
-            echo "Keymap file not found for ${KEYBOARD}"
-            exit 1
+          if [ "${{ github.event.inputs.layout }}" = "colemakdh" ] || [ "${{ github.event.inputs.layout }}" = "all" ] || [ -z "${{ github.event.inputs.layout }}" ]; then
+            echo "Drawing Sofle Colemak-DH..."
+            mise run draw:sofle
+          fi
+          if [ "${{ github.event.inputs.layout }}" = "qwerty" ] || [ "${{ github.event.inputs.layout }}" = "all" ] || [ -z "${{ github.event.inputs.layout }}" ]; then
+            echo "Drawing Sofle QWERTY..."
+            mise run draw:sofle:qwerty
           fi
 
-      - name: Draw keymaps from shared definitions
+      - name: Draw Q1 Keymaps
+        if: github.event.inputs.keyboard == 'q1' || github.event.inputs.keyboard == 'all' || github.event.inputs.keyboard == ''
         run: |
-          mkdir -p keymap-drawer/output
-          # Process shared keymap definitions if they exist
-          for keymap_file in lib/keymaps/base/*.dtsi lib/keymaps/miryoku/*.dtsi 2>/dev/null; do
-            if [ -f "$keymap_file" ]; then
-              name=$(basename "$keymap_file" .dtsi)
-              echo "Processing shared keymap: $name"
-              # Convert to ZMK format temporarily
-              python3 scripts/keymap-convert.py --input "$keymap_file" --from shared --to zmk --output "/tmp/${name}.keymap" 2>/dev/null || echo "Skipping $name (converter not ready)"
-              if [ -f "/tmp/${name}.keymap" ]; then
-                keymap -c keymap_drawer.config.yaml parse -z "/tmp/${name}.keymap" > "keymap-drawer/output/${name}.yaml" 2>/dev/null || true
-                keymap -c keymap_drawer.config.yaml draw "keymap-drawer/output/${name}.yaml" -o "keymap-drawer/output/${name}.svg" 2>/dev/null || true
-              fi
-            fi
-          done
+          if [ "${{ github.event.inputs.layout }}" = "colemakdh" ] || [ "${{ github.event.inputs.layout }}" = "all" ] || [ -z "${{ github.event.inputs.layout }}" ]; then
+            echo "Drawing Q1 Colemak-DH..."
+            mise run draw:q1
+          fi
+          if [ "${{ github.event.inputs.layout }}" = "qwerty" ] || [ "${{ github.event.inputs.layout }}" = "all" ] || [ -z "${{ github.event.inputs.layout }}" ]; then
+            echo "Drawing Q1 QWERTY..."
+            mise run draw:q1:qwerty
+          fi
 
       - name: Commit changes
         run: |
@@ -71,6 +62,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "[Draw] Sync keymap diagram for ${KEYBOARD:-eyelash_sofle}"
+            git commit -m "[Draw] Regenerate keymap diagrams ($(date -I))"
             git push
           fi

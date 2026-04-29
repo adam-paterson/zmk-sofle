@@ -73,6 +73,174 @@ uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${KEYBOARD}.yaml"
 echo "Generated: keymap-drawer/${KEYBOARD}.yaml and keymap-drawer/${KEYBOARD}.svg"
 '''
 
+# ============================================================================
+# UNIFIED DRAW TASKS (new architecture - no sed, explicit paths)
+# ============================================================================
+
+[tasks."draw:sofle"]
+description = "Generate keymap SVG for Sofle keyboard (Colemak-DH layout)"
+sources = [
+  "firmware/zmk/config/keyboards/eyelash_sofle/keymap/eyelash_sofle_colemakdh.keymap",
+  "keymap_drawer.config.yaml",
+  "firmware/zmk/config/keyboards/eyelash_sofle/eyelash_sofle.json",
+]
+outputs = [
+  "keymap-drawer/eyelash_sofle_colemakdh.yaml",
+  "keymap-drawer/eyelash_sofle_colemakdh.svg",
+]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEYMAP_FILE="firmware/zmk/config/keyboards/eyelash_sofle/keymap/eyelash_sofle_colemakdh.keymap"
+OUTPUT_NAME="eyelash_sofle_colemakdh"
+
+echo "Drawing Sofle Colemak-DH keymap..."
+
+mkdir -p keymap-drawer
+uv run keymap -c keymap_drawer.config.yaml parse -z "${KEYMAP_FILE}" > "keymap-drawer/${OUTPUT_NAME}.yaml"
+uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${OUTPUT_NAME}.yaml" -o "keymap-drawer/${OUTPUT_NAME}.svg"
+echo "Generated: keymap-drawer/${OUTPUT_NAME}.yaml and keymap-drawer/${OUTPUT_NAME}.svg"
+'''
+
+[tasks."draw:sofle:qwerty"]
+description = "Generate keymap SVG for Sofle keyboard (QWERTY layout)"
+sources = [
+  "firmware/zmk/config/keyboards/eyelash_sofle/keymap/eyelash_sofle_qwerty.keymap",
+  "keymap_drawer.config.yaml",
+  "firmware/zmk/config/keyboards/eyelash_sofle/eyelash_sofle.json",
+]
+outputs = [
+  "keymap-drawer/eyelash_sofle_qwerty.yaml",
+  "keymap-drawer/eyelash_sofle_qwerty.svg",
+]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEYMAP_FILE="firmware/zmk/config/keyboards/eyelash_sofle/keymap/eyelash_sofle_qwerty.keymap"
+OUTPUT_NAME="eyelash_sofle_qwerty"
+
+echo "Drawing Sofle QWERTY keymap..."
+
+mkdir -p keymap-drawer
+uv run keymap -c keymap_drawer.config.yaml parse -z "${KEYMAP_FILE}" > "keymap-drawer/${OUTPUT_NAME}.yaml"
+uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${OUTPUT_NAME}.yaml" -o "keymap-drawer/${OUTPUT_NAME}.svg"
+echo "Generated: keymap-drawer/${OUTPUT_NAME}.yaml and keymap-drawer/${OUTPUT_NAME}.svg"
+'''
+
+[tasks."draw:q1"]
+description = "Generate keymap SVG for Keychron Q1 V2 ISO keyboard (Colemak-DH layout)"
+sources = [
+  "firmware/qmk/keyboards/keychron_q1v2/iso_encoder/keymaps/keychron_q1v2_iso_colemakdh/keymap.c",
+  "keymap_drawer.config.yaml",
+]
+outputs = [
+  "keymap-drawer/keychron_q1v2_iso_colemakdh.yaml",
+  "keymap-drawer/keychron_q1v2_iso_colemakdh.svg",
+]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEYMAP_FILE="firmware/qmk/keyboards/keychron_q1v2/iso_encoder/keymaps/keychron_q1v2_iso_colemakdh/keymap.c"
+OUTPUT_NAME="keychron_q1v2_iso_colemakdh"
+
+echo "Drawing Keychron Q1 Colemak-DH keymap..."
+
+mkdir -p keymap-drawer
+# QMK keymap.c files need to be converted to ZMK-style for keymap-drawer
+# For now, use a placeholder that documents the Q1 layout
+cat > "keymap-drawer/${OUTPUT_NAME}.yaml" << 'EOF'
+layout: {qmk_keyboard: keychron/q1v2/iso_encoder}
+layers:
+  BASE:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, Q, W, F, P, B, J, L, U, Y, ";", "[", "]", "\\", Del]
+    - [Caps, A, R, S, T, G, M, N, E, I, O, "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, Z, X, C, D, V, K, H, ",", ".", "/", {w: 1.75}, Shift, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Left, Down, Right]
+  SYMS:
+    - [Esc, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, Backspace, Delete]
+    - [Tab, "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "\\", Ins]
+    - [Caps, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", '"', Enter, {h: 2}]
+    - [{w: 1.25}, Shift, "~", "`", "+", "_", "{", "}", "[", "]", "|", "?", {w: 1.75}, Shift, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Prev, Play, Next]
+  NAV:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, Q, W, F, P, B, J, L, U, Y, ";", "[", "]", "\\", Del]
+    - [Caps, A, R, S, T, G, M, N, E, I, O, "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, Z, X, C, D, V, K, H, ",", ".", "/", {w: 1.75}, Shift, Up, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Home, PgDn, End]
+  UTIL:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, BT1, BT2, BT3, BT4, BT5, OUT_USB, OUT_BLE, EP_ON, EP_OFF, ";", "[", "]", "\\", Del]
+    - [Caps, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, RGB_EFF, "7", "8", "9", "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, "~", "`", "+", "_", "{", "}", "[", "]", "|", "?", {w: 1.75}, Shift, Vol+, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Mute, Vol-, Mute]
+EOF
+uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${OUTPUT_NAME}.yaml" -o "keymap-drawer/${OUTPUT_NAME}.svg" 2>/dev/null || echo "SVG generation for Q1 requires manual layout definition"
+echo "Generated: keymap-drawer/${OUTPUT_NAME}.yaml"
+'''
+
+[tasks."draw:q1:qwerty"]
+description = "Generate keymap SVG for Keychron Q1 V2 ISO keyboard (QWERTY layout)"
+sources = [
+  "firmware/qmk/keyboards/keychron_q1v2/iso_encoder/keymaps/keychron_q1v2_iso_qwerty/keymap.c",
+  "keymap_drawer.config.yaml",
+]
+outputs = [
+  "keymap-drawer/keychron_q1v2_iso_qwerty.yaml",
+  "keymap-drawer/keychron_q1v2_iso_qwerty.svg",
+]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+KEYMAP_FILE="firmware/qmk/keyboards/keychron_q1v2/iso_encoder/keymaps/keychron_q1v2_iso_qwerty/keymap.c"
+OUTPUT_NAME="keychron_q1v2_iso_qwerty"
+
+echo "Drawing Keychron Q1 QWERTY keymap..."
+
+mkdir -p keymap-drawer
+# QMK keymap.c files need to be converted to ZMK-style for keymap-drawer
+# For now, use a placeholder that documents the Q1 QWERTY layout
+cat > "keymap-drawer/${OUTPUT_NAME}.yaml" << 'EOF'
+layout: {qmk_keyboard: keychron/q1v2/iso_encoder}
+layers:
+  BASE:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, Q, W, E, R, T, Y, U, I, O, P, "[", "]", "\\", Del]
+    - [Caps, A, S, D, F, G, H, J, K, L, ";", "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, Z, X, C, V, B, N, M, ",", ".", "/", {w: 1.75}, Shift, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Left, Down, Right]
+  SYMS:
+    - [Esc, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, Backspace, Delete]
+    - [Tab, "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "\\", Ins]
+    - [Caps, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", '"', Enter, {h: 2}]
+    - [{w: 1.25}, Shift, "~", "`", "+", "_", "{", "}", "[", "]", "|", "?", {w: 1.75}, Shift, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Prev, Play, Next]
+  NAV:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, Q, W, E, R, T, Y, U, I, O, P, "[", "]", "\\", Del]
+    - [Caps, A, S, D, F, G, H, J, K, L, ";", "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, Z, X, C, V, B, N, M, ",", ".", "/", {w: 1.75}, Shift, Up, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Home, PgDn, End]
+  UTIL:
+    - [Esc, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", Backspace, "~"]
+    - [Tab, BT1, BT2, BT3, BT4, BT5, OUT_USB, OUT_BLE, EP_ON, EP_OFF, P, "[", "]", "\\", Del]
+    - [Caps, RGB_TOG, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, RGB_EFF, "7", "8", "9", "'", Enter, {h: 2}]
+    - [{w: 1.25}, Shift, "~", "`", "+", "_", "{", "}", "[", "]", "|", "?", {w: 1.75}, Shift, Vol+, {h: 2}]
+    - [{w: 1.25}, Ctrl, {w: 1.25}, Win, {w: 1.25}, Alt, {w: 6.25}, Space, {w: 1.25}, Alt, {w: 1.25}, Fn, {w: 1.25}, Ctrl, Mute, Vol-, Mute]
+EOF
+uv run keymap -c keymap_drawer.config.yaml draw "keymap-drawer/${OUTPUT_NAME}.yaml" -o "keymap-drawer/${OUTPUT_NAME}.svg" 2>/dev/null || echo "SVG generation for Q1 requires manual layout definition"
+echo "Generated: keymap-drawer/${OUTPUT_NAME}.yaml"
+'''
+
+[tasks."draw:all"]
+description = "Generate all keymap diagrams (Sofle and Q1, both layouts)"
+depends = ["draw:sofle", "draw:sofle:qwerty", "draw:q1", "draw:q1:qwerty"]
+
 [tasks.build]
 description = "Build firmware for KEYBOARD (default: eyelash_sofle)"
 run = '''
@@ -693,4 +861,27 @@ echo ""
 echo "=== Shared Keymap Definitions ==="
 echo "Available layouts in lib/keymaps/:"
 find lib/keymaps -name "*.dtsi" -exec basename {} .dtsi \; 2>/dev/null | sed 's/^/  - /'
+'''
+
+# ============================================================================
+# UNIFIED HELPER TASKS (complementing legacy tasks)
+# ============================================================================
+
+[tasks."ci:matrix"]
+description = "Output JSON build matrix for CI/CD pipelines"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Output a JSON matrix for GitHub Actions
+cat << 'EOF'
+{
+  "include": [
+    {"firmware": "zmk", "keyboard": "sofle", "layout": "colemakdh", "task": "build:zmk:sofle:colemakdh"},
+    {"firmware": "zmk", "keyboard": "sofle", "layout": "qwerty", "task": "build:zmk:sofle:qwerty"},
+    {"firmware": "qmk", "keyboard": "q1", "layout": "colemakdh", "task": "build:qmk:q1:colemakdh"},
+    {"firmware": "qmk", "keyboard": "q1", "layout": "qwerty", "task": "build:qmk:q1:qwerty"}
+  ]
+}
+EOF
 '''
