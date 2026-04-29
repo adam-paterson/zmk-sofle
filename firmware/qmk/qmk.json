@@ -1,5 +1,5 @@
 {
-  "userspace_version": "1.0",
+  "userspace_version": "1.1",
   "build_targets": {
     "eyelash_sofle": {
       "default": {
@@ -10,11 +10,37 @@
         "keyboard": "eyelash_sofle",
         "keymap": "miryoku"
       }
+    },
+    "keychron_q1v2_iso_colemakdh": {
+      "default": {
+        "keyboard": "keychron/q1v2/iso_encoder",
+        "keymap": "keychron_q1v2_iso_colemakdh"
+      }
+    },
+    "keychron_q1v2_iso_qwerty": {
+      "default": {
+        "keyboard": "keychron/q1v2/iso_encoder",
+        "keymap": "keychron_q1v2_iso_qwerty"
+      }
     }
   },
   "keyboards": {
     "eyelash_sofle": {
       "keymaps": ["default", "miryoku"]
+    },
+    "keychron_q1v2_iso_colemakdh": {
+      "keymaps": ["keychron_q1v2_iso_colemakdh"],
+      "firmware": "qmk",
+      "layout": "iso_83",
+      "encoder": true,
+      "rgb_matrix": true
+    },
+    "keychron_q1v2_iso_qwerty": {
+      "keymaps": ["keychron_q1v2_iso_qwerty"],
+      "firmware": "qmk",
+      "layout": "iso_83",
+      "encoder": true,
+      "rgb_matrix": true
     }
   }
 }

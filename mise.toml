@@ -503,6 +503,76 @@ echo "Note: Test suite to be implemented"
 # TODO: Add pytest tests for keymap-convert.py
 '''
 
+# ============================================================================
+# QMK KEYCHRON Q1 V2 ISO BUILD TASKS
+# ============================================================================
+
+[tasks."build:qmk:q1:colemakdh"]
+description = "Build QMK firmware for Keychron Q1 V2 ISO with Colemak-DH layout"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Building QMK firmware for Keychron Q1 V2 ISO (Colemak-DH)..."
+
+# Check if QMK CLI is available
+if ! command -v qmk &> /dev/null; then
+    echo "QMK CLI not found. Install with: pip install qmk"
+    exit 1
+fi
+
+# Setup QMK userspace if not already configured
+if [ ! -d firmware/qmk/.git ]; then
+    echo "Setting up QMK userspace..."
+    cd firmware/qmk
+    qmk setup --yes
+fi
+
+# Configure overlay_dir to point to this repo
+qmk config user.overlay_dir="${PWD}/firmware/qmk"
+
+# Build the firmware
+cd firmware/qmk
+qmk compile -kb keychron/q1v2/iso_encoder -km keychron_q1v2_iso_colemakdh
+
+echo "Build complete. Firmware location: firmware/qmk/.build/"
+'''
+
+[tasks."build:qmk:q1:qwerty"]
+description = "Build QMK firmware for Keychron Q1 V2 ISO with QWERTY layout"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "Building QMK firmware for Keychron Q1 V2 ISO (QWERTY)..."
+
+# Check if QMK CLI is available
+if ! command -v qmk &> /dev/null; then
+    echo "QMK CLI not found. Install with: pip install qmk"
+    exit 1
+fi
+
+# Setup QMK userspace if not already configured
+if [ ! -d firmware/qmk/.git ]; then
+    echo "Setting up QMK userspace..."
+    cd firmware/qmk
+    qmk setup --yes
+fi
+
+# Configure overlay_dir to point to this repo
+qmk config user.overlay_dir="${PWD}/firmware/qmk"
+
+# Build the firmware
+cd firmware/qmk
+qmk compile -kb keychron/q1v2/iso_encoder -km keychron_q1v2_iso_qwerty
+
+echo "Build complete. Firmware location: firmware/qmk/.build/"
+'''
+
+[tasks."build:qmk:q1:all"]
+description = "Build QMK firmware for Keychron Q1 V2 ISO with all layouts"
+depends = ["build:qmk:q1:colemakdh", "build:qmk:q1:qwerty"]
+
 [tasks."firmware:list"]
 description = "List available firmware and keyboards"
 run = '''
@@ -514,10 +584,18 @@ grep "board:" firmware/zmk/build.yaml | sed 's/.*board: /  - /'
 
 echo ""
 echo "QMK targets from firmware/qmk/qmk.json:"
-grep -o '"eyelash_[^"]*"' firmware/qmk/qmk.json | sed 's/"//g' | sort -u | sed 's/^/  - /'
+grep -o '"keychron_[^"]*"' firmware/qmk/qmk.json 2>/dev/null | sed 's/"//g' | sort -u | sed 's/^/  - /'
+grep -o '"eyelash_[^"]*"' firmware/qmk/qmk.json 2>/dev/null | sed 's/"//g' | sort -u | sed 's/^/  - /'
+
+echo ""
+echo "=== Available Build Tasks ==="
+echo "Keychron Q1 V2 ISO:"
+echo "  - mise run build:qmk:q1:colemakdh  # Colemak-DH layout"
+echo "  - mise run build:qmk:q1:qwerty     # QWERTY layout"
+echo "  - mise run build:qmk:q1:all        # Both layouts"
 
 echo ""
 echo "=== Shared Keymap Definitions ==="
 echo "Available layouts in lib/keymaps/:"
-find lib/keymaps -name "*.dtsi" -exec basename {} .dtsi \; | sed 's/^/  - /'
+find lib/keymaps -name "*.dtsi" -exec basename {} .dtsi \; 2>/dev/null | sed 's/^/  - /'
 '''
